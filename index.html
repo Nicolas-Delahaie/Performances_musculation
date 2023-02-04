@@ -6,20 +6,14 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="src/styles/mainPage.css">
+        <link rel="stylesheet" href="src/styles/index.css">
+        <script src="" async defer></script>
     </head>
     <body>
-        <head>
-            <img id="logo">
+        <header>
+            <img src="src/datas/img/assets/logo.jpg" id="logo">
             <h1>Peng Records</h1>
-
-            <ul id="categoryZone">
-                <li><a>TOUT</a></li>
-                <li><a>PULL</a></li>
-                <li><a>PUSH</a></li>
-                <li><a>LEGS</a></li>
-                <li><a>+</a></li>
-            </ul>
 
             <nav>
                 <menu>
@@ -27,18 +21,60 @@
                     <a>Paramètres</a>
                 </menu>
             </nav>
-        </head>
+        </header>
         <main>
+            <section id="categoriesZone">
+                <a>TOUT</a>
+                <a>PULL</a>
+                <a>PUSH</a>
+                <a>LEGS</a>
+                <a>+</a>
+            </section>
+            
             <form id="researchZone">
                 <input type="text" id="searchBar" placeholder="Rechercher un exercice">
             </form>
+
             <section id="exercisesZone">
-                <section class="exercises">
-                    <
-                    <img class="exersiseImage">
+                <section class="exersises">
+                    <img class="imgExersise" src="src/datas/img/exercices/pompe.png">
+                    <section class="exersiseDescription">
+                        <section class="exersiseTitleZone">
+                            <h2>Pushups</h2>
+                            <img src="src/datas/img/assets/logo_modifier.png" class="imgChange">
+                            <img src="src/datas/img/assets/etoilePleine.svg" class="imgStar">
+                        </section>
+                        <p>30 reps</p>
+                    </section>
+                </section>
+
+                <section class="exersises">
+                    <img class="imgExersise" src="src/datas/img/exercices/deadlift_halteres.png">
+                    <section class="exersiseDescription">
+                        <section class="exersiseTitleZone">
+                            <h2>Deadlift haltères</h2>
+                            <img src="src/datas/img/assets/logo_modifier.png" class="imgChange">
+                            <img src="src/datas/img/assets/etoilePleine.svg" class="imgStar">
+                        </section>
+                        <p>100 kg</p>
+                    </section>
+                </section>
+
+                <section class="directories">
+                    <h2>PECS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>BICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>QUADRICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
                 </section>
             </section>
         </main>
-        <script src="" async defer></script>
     </body>
 </html>
