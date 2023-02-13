@@ -79,31 +79,38 @@ main{
     text-align:center;
 }
 
-#oc_zone_exersise{
-    position:absolute;
+#oc_container_exersise{
+    position:fixed;
     display:flex;
     justify-content:center;
+    align-items:center;
+    z-index: 1;
 
     width: 100%;
     height: 100%;
 }
 #oc_exersise{
-    width : 400px;
+    width : 500px;
+    height: min-content;
     border: 5px solid black;
     border-radius: 30px;
     padding: 20px;
     background-color: white;
 }
-#description_upper_zone{
+#oc_exersise_description{
+    text-align: center;
+}
+#oc_exersise_description_title{
+    display: flex;
+    justify-self: center;
+    align-self: end;
+    height: min-content;
+}
+#oc_exersise_description > section {
     display:grid;
     grid-template-columns: 1fr min-content;
 }
-#oc_title_description_zone{
-    display: flex;
-    justify-self: center;
-    height: min-content;
-}
-#oc_title_description_zone > h3{
+#oc_exersise_description_title > h3{
     height:100%;
     margin:0px;
     align-self:center;
@@ -119,4 +126,13 @@ main{
     top:0px;
     right: 0px;
     margin-left: 15px;
+}
+
+#oc_new_record_button{
+    display: inline;
+    justify-self: center;
+    width: 80%;
+    height: 40px;
+    margin: 20px;
+    border-radius: 20px;;
 }
