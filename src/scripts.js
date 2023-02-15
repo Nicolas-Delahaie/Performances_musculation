@@ -1,78 +1,52 @@
+exoAffiche = false;
 
-
-function showExersise(){ 
-    // //Creation des elements
-    var container_exo = document.createElement("section");
-//     container_exo.outerhtml = `
-// <section id="oc_container_exersise">
-//     <section id="oc_exersise">
-//         <img src="src/datas/img/exercices/deadlift_halteres.png" alt="">
+/**
+ * @brief Affiche l interface de l exercice clique
+ */
+function clicOnExersise(nomExo){
+    if (exoAffiche){
+        //On retire l ancien exo
+        hideExersiseInterface();
         
-//         <section id="oc_exersise_description">
-//             <section>
-//                 <section id="oc_exersise_description_title">
-//                     <h3>Soulevé de terre haltère</h3>
-//                     <img id="oc_edit_button" src="src/datas/img/assets/logo_modifier.png" alt="">
-//                 </section>
-                
-//                 <img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg" alt="">
-//             </section>
-
-//             <button id="oc_new_record_button">New record</button>
-//         </section>
-//     </section>
-// </section>`;
-// document.body.appendChild(container_exo);
-document.body.insertBefore(container_exo, document.querySelector("header"));
-
-    
-    
-    
-    const exo = document.createElement("section");
-    container_exo.appendChild(exo);
-
-    const imgExo = document.createElement("img");  
-    exo.appendChild(imgExo);
-    const description = document.createElement("section");
-    exo.appendChild(description);
-
-    const description_header = document.createElement("section");
-    description.appendChild(description_header);
-    const new_reccord = document.createElement("button");
-    description.appendChild(new_reccord);
-    
-    const container_title = document.createElement("section");
-    description_header.appendChild(container_title);
-    const star = document.createElement("img");
-    description_header.appendChild(star);
-
-    const title_exo = document.createElement("h3");
-    container_title.appendChild(title_exo);
-    const edit_img = document.createElement("img");
-    container_title.appendChild(edit_img);
-
-    //Ajout des identifiants
-    container_exo.setAttribute("id", 'oc_container_exersise');
-    exo.setAttribute("id", 'oc_exersise');
-    // imgExo.setAttribute("id", );
-    description.setAttribute("id", 'oc_exersise_description');
-    // description_header.setAttribute("id", );
-    new_reccord.setAttribute("id", 'oc_new_record_button');
-    container_title.setAttribute("id", 'oc_exersise_description_title');
-    star.setAttribute("id", 'oc_favorite_button');
-    // title_exo.setAttribute("id", );
-    edit_img.setAttribute("id", 'oc_edit_button');
-
-
-    //Ajout du contenu des elements
-    new_reccord.textContent = "New reccord";
-    title_exo.textContent = "Soulevé de terre haltère";
-    imgExo.setAttribute("src", "src/datas/img/exercices/deadlift_halteres.png");
-    star.setAttribute("src", "src/datas/img/assets/etoilePleine.svg");
-    edit_img.setAttribute("src", "src/datas/img/assets/logo_modifier.png");
-
-
-
-    console.log(container_exo.outerhtml);  
+    }
+    showExersiseInterface(nomExo);
 }
 
+
+/**
+ * @brief Retire l interface de l exercice
+ */
+function hideExersiseInterface(){
+    document.body.removeChild(document.getElementById("oc_container_exersise"))
+    exoAffiche = false;
+}
+
+/**
+ * @brief Ajotue l interface de l exercice clique
+ */
+function showExersiseInterface(nomExo){     
+    //Creation de l element
+    var container_exo = document.createElement("section");
+    document.body.insertBefore(container_exo, document.querySelector("header"));
+    
+    container_exo.setAttribute("id", "oc_container_exersise");
+    container_exo.innerHTML = `    
+    <section id="oc_container_exersise">
+    <section id="oc_exersise">
+    <svg id="quitBtn" onclick="hideExersiseInterface()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+    </svg>
+    <img src="src/datas/img/exercices/deadlift_halteres.png">
+    <section id="oc_exersise_description">
+    <section>
+    <section id="oc_exersise_description_title">
+    <h3>Soulevé de terre haltère</h3><img id="oc_edit_button"
+    src="src/datas/img/assets/logo_modifier.png">
+    </section><img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
+    </section><button id="oc_new_record_button">New reccord</button>
+    </section>
+    </section>
+    </section>
+    `;
+    exoAffiche = true;  
+}

@@ -10,8 +10,25 @@
         <link rel="stylesheet" href="src/styles/index.css">
         <script src="src/scripts.js" async defer></script>
     </head>
-    <body id="body">
-        <header id ="header">
+    <body>
+        <!-- <section id="oc_container_exersise">
+            <section id="oc_exersise">
+                <svg id="quitBtn" onclick="removeExersiseInterface()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+                <img src="src/datas/img/exercices/deadlift_halteres.png">
+                <section id="oc_exersise_description">
+                    <section>
+                        <section id="oc_exersise_description_title">
+                            <h3>Soulevé de terre haltère</h3><img id="oc_edit_button"
+                                src="src/datas/img/assets/logo_modifier.png">
+                        </section><img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
+                    </section><button id="oc_new_record_button">New reccord</button>
+                </section>
+            </section>
+        </section> -->
+        
+        <header>
             <img src="src/datas/img/assets/logo.jpg" id="logo">
             <h1>Peng Records</h1>
 
@@ -36,7 +53,7 @@
             </form>
 
             <section id="exercisesZone">
-                <section class="exersises" onclick="showExersise()">
+                <section class="exersises" onclick="clicOnExersise('pompe')">
                     <img class="imgExersise" src="src/datas/img/exercices/pompe.png">
                     <section class="exersiseDescription">
                         <section class="exersiseTitleZone">
@@ -47,7 +64,7 @@
                     </section>
                 </section>
 
-                <section class="exersises" onclick="showExersise()">
+                <section class="exersises" onclick="clicOnExersise('deadlift_halteres')">
                     <img class="imgExersise" src="src/datas/img/exercices/deadlift_halteres.png">
                     <section class="exersiseDescription">
                         <section class="exersiseTitleZone">
