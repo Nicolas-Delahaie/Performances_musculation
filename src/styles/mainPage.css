@@ -45,12 +45,18 @@ main{
     grid-template-columns: repeat(5, 1fr);
 }
 
+.exersises{
+    border: 2px solid black;
+}
+
 .exersises, .directories{
     padding: 20px;
+    margin: 10px;
 }
 
 .imgExersise, .imgDir{
-    width:100%;
+    object-fit: contain;
+    height: 200px;
 }
 .imgDir{
     height:100%;
