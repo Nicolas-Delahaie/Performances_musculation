@@ -1,52 +1,52 @@
 exoAffiche = false;
+//nomExoAffiche
 
 /**
  * @brief Affiche l interface de l exercice clique
  */
 function clicOnExersise(nomExo){
     if (exoAffiche){
-        //On retire l ancien exo
-        hideExersiseInterface();
-        
+        if (nomExoAffiche == nomExo){
+            //Clic sur un exo deja affiche 
+            hideExersiseInterface();
+        }
+        else{
+            //Clic sur un exo non affiche
+            hideExersiseInterface();
+            showExersiseInterface(nomExo);
+        }
     }
-    showExersiseInterface(nomExo);
+    else{
+        //Aucun exo affiche
+        showExersiseInterface(nomExo);
+    }
 }
 
 
-/**
- * @brief Retire l interface de l exercice
- */
+
+/** @brief Retire l interface de l exercice */
 function hideExersiseInterface(){
     document.body.removeChild(document.getElementById("oc_container_exersise"))
     exoAffiche = false;
 }
-
-/**
- * @brief Ajotue l interface de l exercice clique
- */
+/** @brief Ajotue l interface de l exercice clique */
 function showExersiseInterface(nomExo){     
     //Creation de l element
     var container_exo = document.createElement("section");
+    container_exo.setAttribute("id", "oc_container_exersise");
     document.body.insertBefore(container_exo, document.querySelector("header"));
     
-    container_exo.setAttribute("id", "oc_container_exersise");
-    container_exo.innerHTML = `    
-    <section id="oc_container_exersise">
-    <section id="oc_exersise">
-    <svg id="quitBtn" onclick="hideExersiseInterface()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-    </svg>
-    <img src="src/datas/img/exercices/deadlift_halteres.png">
-    <section id="oc_exersise_description">
-    <section>
-    <section id="oc_exersise_description_title">
-    <h3>Soulevé de terre haltère</h3><img id="oc_edit_button"
-    src="src/datas/img/assets/logo_modifier.png">
-    </section><img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
-    </section><button id="oc_new_record_button">New reccord</button>
-    </section>
-    </section>
-    </section>
-    `;
+    //Recuperation du code html a afficher
+    var requete = new XMLHttpRequest();
+    requete.onload = function() {
+        //La variable à passer est alors contenue dans l'objet response et l'attribut responseText.
+        html = this.responseText;
+    };
+    requete.open("GET", "src/scripts/htmlExoClique.php?nomExo="+nomExo, false); //True pour que l'exécution du script continue pendant le chargement, false pour attendre.
+    requete.send();
+
+    container_exo.innerHTML = html;
+    
     exoAffiche = true;  
+    nomExoAffiche = nomExo;
 }
