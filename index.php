@@ -11,11 +11,47 @@
         <script src="src/scripts.js" async defer></script>
     </head>
 <?php
+    /**
+     * @brief Retourne le resultat de la requete mise en paremetres
+     * @param $query la requete en question
+     * @return ['codeRetour', ['msgErreur'], ['reponse']
+     */
+    function requestDB($query){
+        $fonctionne = true;
+        if ($fonctionne){
+            return ["pushups"=>["nomAffiche"=>"Pompes" ,"favorite"=>true, "bodyWeight"=>true, "weight"=>0, "repetitions"=>40], 
+                    "deadlift_halteres"=> ["nomAffiche"=>"Soulevé de terre", "favorite"=>true, "bodyWeight"=>false, "weight"=>100, "repetitions"=>3],
+                    "overhead_press"=> ["nomAffiche"=>"Soulevé militaire à la barre", "favorite"=>false, "bodyWeight"=>false, "weight"=>60, "repetitions"=>2]];
+        }
+        else{
+            throw "Impossible d'acceder a la bdd";
+        }
+    }
+
+    session_start();
+    $_SESSION['userId'] = 1;
+    $_SESSION['category'] = 'TOUT';
+
     $user = "Nicolas";
     $categories = ["TOUT", "PULL", "PUSH", "LEGS", "+"];
-    $exersisesBdTemp = ["pushups"=>["nomAffiche"=>"Pompes" ,"favorite"=>true, "bodyWeight"=>true, "weight"=>0, "repetitions"=>40], 
-                        "deadlift_halteres"=> ["nomAffiche"=>"Soulevé de terre", "favorite"=>true, "bodyWeight"=>false, "weight"=>100, "repetitions"=>3],
-                        "overhead_press"=> ["nomAffiche"=>"Soulevé militaire à la barre", "favorite"=>false, "bodyWeight"=>false, "weight"=>60, "repetitions"=>2]];
+    
+
+    try{
+        $exersises = requestDB(`SELECT E.titre, E.titre_affiche, P.repetitions, P.kilos, P.auPoidsDeCorps 
+                               FROM EXERCICE E 
+                               INNER JOIN PERFORMANCE P 
+                               ON E.id_EXERCICE = P.id_EXERCICE
+                               WHERE id_UTILISATEUR = `.strval($_SESSION['userId']).` AND
+                                     id_CATEGORIE = `.$_SESSION["category"].`
+                               `);
+    }
+    catch (string $e){
+        echo $e;
+    }
+
+
+    
+
 ?>
     <body>        
         <header>
@@ -44,7 +80,7 @@
 
             <section id="exercisesZone">
 <?php
-    foreach($exersisesBdTemp as $nomExo => $exersise){
+    foreach($exersises as $nomExo => $exersise){
         //Etoile
         if ($exersise["favorite"]){
             $nomImageEtoile = "etoilePleine.svg";
