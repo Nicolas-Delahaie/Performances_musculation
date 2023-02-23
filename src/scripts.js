@@ -1,21 +1,6 @@
 var exoAffiche = false;
 var nomExoAffiche = "";
-
-var exersisesBdTemp = {"pushups":{"nomAffiche":"Pompes" ,
-                                "favorite":true, 
-                                "bodyWeight":true, 
-                                "weight":0, 
-                                "repetitions":40}, 
-                    "deadlift_halteres": {"nomAffiche":"Soulevé de terre", 
-                                           "favorite":true, 
-                                           "bodyWeight":false, 
-                                           "weight":100, 
-                                           "repetitions":3},
-                    "overhead_press": {"nomAffiche":"Soulevé militaire à la barre", 
-                                        "favorite":false, 
-                                        "bodyWeight":false, 
-                                        "weight":60, 
-                                        "repetitions":2}};
+var exercice;
 
 /**
  * @brief Affiche l interface de l exercice clique
@@ -37,9 +22,56 @@ function clicOnExersise(nomExo){
         showExersiseInterface(nomExo);
     }
 }
-function showNewRecordInterface(){
-    alert(nomExoAffiche);
+/**
+ * @brief Affiche la zone de saisie d'une nouvelle PR
+ */
+function clickAddRecord(){
+    //Creation de l element
+    var zoneDeSaisie = document.createElement("null");    
+    document.getElementById('oc_exersise_description').appendChild(zoneDeSaisie);
+    document.getElementById('oc_exersise_description').removeChild(document.getElementById('oc_new_record_button'));
+    zoneDeSaisie.outerHTML =`<section id="oc_exersise_new_record">
+                                 <section>
+                                     <input type="number" name="weight" id="lineEd-weight">
+                                     <p class='rightLabel'>kg</p>
+                                     <input type="number" name="reps" id="lineEd-reps" value="1">
+                                     <p class='rightLabel'>reps</p>
+                                     <p id='dateLabel'>Fait le</p> 
+                                     <input type="date" name="date" id="lineEd-date" value="2023-23-02">
+                                 </section>
+                                 <button id='bValidate' onclick='clickValidateRecord()'>Valider</button>
+                             </section>`;
 }
+/**
+ * @brief Regarde si les informations sont correctes puis ajoute a la base de donnees
+ */
+function clickValidateRecord(){
+    alert('Validation de la conformite des informations puis ajout')
+}
+/**
+ * @brief Met a jour les elements de l exercice clique avec les infos de la bdd
+ * @param[in] nomExoAffiche 
+ * @param[out] exercice
+ */
+function initialiseExerciceBDD(){
+    bddTemp = {"pushups":{"nomAffiche":"Pompes" ,
+                         "favorite":true, 
+                         "bodyWeight":true, 
+                         "weight":0, 
+                         "repetitions":40}, 
+               "deadlift_halteres": {"nomAffiche":"Soulevé de terre", 
+                                      "favorite":true, 
+                                      "bodyWeight":false, 
+                                      "weight":100, 
+                                      "repetitions":3},
+               "overhead_press": {"nomAffiche":"Soulevé militaire à la barre", 
+                                   "favorite":false, 
+                                   "bodyWeight":false, 
+                                   "weight":60, 
+                                   "repetitions":2}};
+    exercice = bddTemp[nomExoAffiche];
+}
+
 
 /** @brief Retire l interface de l exercice */
 function hideExersiseInterface(){
@@ -49,6 +81,11 @@ function hideExersiseInterface(){
 }
 /** @brief Ajotue l interface de l exercice clique */
 function showExersiseInterface(nomExo){     
+    //Reinitiailistion des donnees du nouvel exercice
+    exoAffiche = true;  
+    nomExoAffiche = nomExo;
+    initialiseExerciceBDD();
+
     //Creation de l element
     var container_exo = document.createElement("null");
     document.body.insertBefore(container_exo, document.querySelector("header"));
@@ -60,20 +97,16 @@ function showExersiseInterface(nomExo){
             </svg>
             <img src="src/datas/img/exercices/`+nomExo+`.png" onclick="hideExersiseInterface()">
             <section id="oc_exersise_description">
-                <section>
+                <section id="oc_exersise_description_header">
                     <section id="oc_exersise_description_title">
-                        <h3>`+exersisesBdTemp[nomExo]["nomAffiche"]+`</h3>
+                        <h3>`+exercice["nomAffiche"]+`</h3>
                         <img id="oc_edit_button" src="src/datas/img/assets/logo_modifier.png">
                     </section>
                     <img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
                 </section>
-                <button id="oc_new_record_button" onclick="showNewRecordInterface()">Nouveau record</button>
+                <button id="oc_new_record_button" onclick="clickAddRecord()">Nouveau record</button>
             </section>
         </section>
     </section>
     `;    
-    
-    
-    exoAffiche = true;  
-    nomExoAffiche = nomExo;
 }
