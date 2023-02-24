@@ -1,0 +1,2 @@
+INSERT INTO `EXERCICE`(`id_EXERCICE`, `titre`, `titre_affiche`, `auPoidsDuCorps`, `id_CATEGORIE`) 
+VALUES (0, "bench_press", "Développé couché", false, )
