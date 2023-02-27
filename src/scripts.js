@@ -1,3 +1,5 @@
+
+
 var exoAffiche = false;
 var nomExoAffiche = "";
 var exercice;
@@ -82,7 +84,7 @@ function hideExersiseInterface(){
 /** @brief Ajotue l interface de l exercice clique */
 function showExersiseInterface(nomExo){     
     //Reinitiailistion des donnees du nouvel exercice
-    exoAffiche = true;  
+    exoAffiche = true;
     nomExoAffiche = nomExo;
     initialiseExerciceBDD();
 

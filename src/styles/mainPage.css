@@ -18,11 +18,10 @@ main{
     flex-direction: column;
     align-items: center;
 }
-#categoriesZone{
+#programsZone{
     display: inline;
-    width: 400px;
 }
-#categoriesZone > a {
+#programsZone > a {
     width: min-content;
     min-width: 80px;
     margin: 0px 10px;
@@ -30,7 +29,7 @@ main{
     background-color: var(--gris);
     text-align: center;
 }
-#categoriesZone > a:hover{
+#programsZone > a:hover{
     background-color: var(--jaune);
 }
 
