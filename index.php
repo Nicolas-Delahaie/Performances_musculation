@@ -17,19 +17,19 @@
     
 
     try{
-        $_GET["query"] = "userName";
+        $_GET["query"] = "getUserName";
         $user = include"src/dbAccess.php";
 
-        $_GET["query"] = "programName";
+        $_GET["query"] = "getCurrentProgramName";
         $currentProgram = include"src/dbAccess.php";
 
-        $_GET["query"] = "defaultPrograms";
+        $_GET["query"] = "getDefaultPrograms";
         $defaultPrograms = include"src/dbAccess.php";
 
-        $_GET["query"] = "privatePrograms";
+        $_GET["query"] = "getPrivatesPrograms";
         $privatePrograms = include"src/dbAccess.php";
 
-        $_GET["query"] = "exersises";
+        $_GET["query"] = "getExersisesInformations";
         $exersises = include"src/dbAccess.php";
     }
     catch(Exception $e){

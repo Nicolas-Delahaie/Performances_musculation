@@ -2,11 +2,11 @@
 /**
  * @brief Retourne le resultat de la requete mise en paremetres
  * @param $_GET["query"] identifiant de la requete en question
- * @details = "userName" : Renvoie le nom lie a $_SESSION["userId"]
- * @details = "programName" : Renvoie le nom du programme selectionne dans $_SESSION["programId"]
- * @details = "defaultPrograms" : Renvoie le nom des programmes par defaut
- * @details = "privatePrograms" : Renvoie le nom des programmes crees par $_SESSION["userId"]
- * @details = "exersises" : Renvoie tous les exercices lies a $_SESSION["programId"] et a $_SESSION["userId"]
+ * @details = "getUserName" : Renvoie le nom lie a $_SESSION["userId"]
+ * @details = "getCurrentProgramName" : Renvoie le nom du programme courrant dans $_SESSION["programId"]
+ * @details = "getDefaultPrograms" : Renvoie le nom des programmes par defaut
+ * @details = "getPrivatesPrograms" : Renvoie le nom des programmes crees par $_SESSION["userId"]
+ * @details = "getExersisesInformations" : Renvoie tous les exercices lies a $_SESSION["programId"] et a $_SESSION["userId"]
  * @return mixed
  */
 
@@ -34,31 +34,31 @@ if (!isset($_GET["query"])){
 
 //Creation de la requete
 switch ($_GET["query"]) {
-    case 'userName': 
+    case 'getUserName': 
         $sql = "SELECT prenom FROM UTILISATEUR WHERE id_UTILISATEUR =".$_SESSION['userId'].";"; 
         $dimension = 1; 
         $readOnly = true;
         break;
 
-    case 'programName':
+    case 'getCurrentProgramName':
         $sql = "SELECT nom FROM PROGRAMME WHERE id_PROGRAMME =".$_SESSION['programId'].";"; 
         $dimension = 1; 
         $readOnly = true;
         break;
 
-    case 'defaultPrograms':
+    case 'getDefaultPrograms':
         $sql = "SELECT nom FROM PROGRAMME WHERE id_UTILISATEUR IS NULL;"; 
         $dimension = 2; 
         $readOnly = true;
         break;
 
-    case 'privatePrograms': 
+    case 'getPrivatesPrograms': 
         $sql = "SELECT nom FROM PROGRAMME WHERE id_UTILISATEUR =".$_SESSION['userId'].";"; 
         $dimension = 2; 
         $readOnly = true;
         break;
 
-    case 'exersises': 
+    case 'getExersisesInformations': 
         $sql = "SELECT E.titre, E.titre_affiche, E.auPoidsDeCorps, P.repetitions, P.kilos 
                 FROM EXERCICE E 
                 LEFT JOIN PERFORMANCE P ON P.id_EXERCICE = E.id_EXERCICE
@@ -71,7 +71,7 @@ switch ($_GET["query"]) {
         break;
 
     default: 
-        throw new Exception ("Requete invalide"); break;
+        throw new Exception ('Requete "'.$_GET["query"].'" invalide'); break;
 }
 
 //Connexion a la bdd
