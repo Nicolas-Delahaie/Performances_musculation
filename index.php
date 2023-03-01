@@ -12,11 +12,17 @@
     </head>
 <?php
     session_start();
-    $_SESSION["userId"] = 1;
-    $_SESSION['programId'] = 1;
-    
+    if (!isset($_SESSION["userId"])){
+        //Utilisateur par defaut
+        $_SESSION["userId"] = 1;
+    }
+    if (!isset($_SESSION["programId"])){
+        $_SESSION['programId'] = 1;
+    }
 
     try{
+        $_GET["for"] = "php";
+
         $_GET["query"] = "getUserName";
         $user = include"src/dbAccess.php";
 
@@ -40,7 +46,7 @@
     echo "
     <body>        
         <header>
-            <img src='src/datas/img/assets/logo.jpg' id='logo'>
+            <img src='src/datas/img/assets/logo.jpg' id='logo' onclick='showExersiseInterface()'>
             <h1>Peng Records</h1>
 
             <nav>
@@ -55,10 +61,10 @@
 
     // -- P R O G R A M M E S --
     foreach ($defaultPrograms as $program){
-        echo "<a>".$program."</a>";
+        echo "<a href='./src/programChange.php?program=".$program["id_PROGRAMME"]."'>".$program["nom"]."</a>";
     }
     foreach ($privatePrograms as $program){
-        echo "<a>".$program."</a>";
+        echo "<a href='./src/programChange.php?program=".$program["id_PROGRAMME"]."'>".$program["nom"]."</a>";
     }
     echo "<a>+</a>";
 
@@ -98,7 +104,7 @@
         }
 
         echo '
-        <section class="exersises" onclick="clicOnExersise(`'.$exersise["titre"].'`)">
+        <section class="exersises" onclick="clicOnExersise(`'.$exersise["id_EXERCICE"].'`)">
             <img class="imgExersise" src="src/datas/img/exercices/'.$exersise["titre"].'.png">
             <section class="exersiseDescription">
                 <section class="exersiseTitleZone">

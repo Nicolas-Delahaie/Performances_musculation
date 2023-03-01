@@ -1,7 +1,5 @@
-
-
 var exoAffiche = false;
-var nomExoAffiche = "";
+var idExoAffiche = "";
 var exercice;
 
 /**
@@ -9,7 +7,7 @@ var exercice;
  */
 function clicOnExersise(nomExo){
     if (exoAffiche){
-        if (nomExoAffiche == nomExo){
+        if (idExoAffiche == nomExo){
             //Clic sur un exo deja affiche 
             hideExersiseInterface();
         }
@@ -52,7 +50,7 @@ function clickValidateRecord(){
 }
 /**
  * @brief Met a jour les elements de l exercice clique avec les infos de la bdd
- * @param[in] nomExoAffiche 
+ * @param[in] idExoAffiche 
  * @param[out] exercice
  */
 function initialiseExerciceBDD(){
@@ -71,7 +69,7 @@ function initialiseExerciceBDD(){
                                    "bodyWeight":false, 
                                    "weight":60, 
                                    "repetitions":2}};
-    exercice = bddTemp[nomExoAffiche];
+    exercice = bddTemp[idExoAffiche];
 }
 
 
@@ -79,36 +77,60 @@ function initialiseExerciceBDD(){
 function hideExersiseInterface(){
     document.body.removeChild(document.getElementById("oc_container_exersise"))
     exoAffiche = false;
-    nomExoAffiche = "";
+    idExoAffiche = "";
 }
 /** @brief Ajotue l interface de l exercice clique */
-function showExersiseInterface(nomExo){     
+function showExersiseInterface(idExo){     
     //Reinitiailistion des donnees du nouvel exercice
     exoAffiche = true;
-    nomExoAffiche = nomExo;
-    initialiseExerciceBDD();
-
-    //Creation de l element
-    var container_exo = document.createElement("null");
-    document.body.insertBefore(container_exo, document.querySelector("header"));
-    container_exo.outerHTML = `
-    <section id="oc_container_exersise">
-        <section id="oc_exersise">
-            <svg id="quitBtn" onclick="hideExersiseInterface()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
-            <img src="src/datas/img/exercices/`+nomExo+`.png" onclick="hideExersiseInterface()">
-            <section id="oc_exersise_description">
-                <section id="oc_exersise_description_header">
-                    <section id="oc_exersise_description_title">
-                        <h3>`+exercice["nomAffiche"]+`</h3>
-                        <img id="oc_edit_button" src="src/datas/img/assets/logo_modifier.png">
+    idExoAffiche = idExo;
+    // initialiseExerciceBDD();
+    fetch('./src/dbAccess.php'+
+          '?for=js'+
+          '&query=getExersiseInformations'+
+          '&idExersise='+idExo, 
+         {method: 'GET',})
+    .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur HTTP, status = ' + response.status);
+        }
+        return response.json();
+    })                                      //Verifie que la requete s est bien deroulee
+    .then(data => {
+        if (data["status"] == "success"){
+            //Si c est reussi
+            exercice = data["datas"];
+            console.log(exercice);
+            //Creation de l element
+            var container_exo = document.createElement("null");
+            document.body.insertBefore(container_exo, document.querySelector("header"));
+            container_exo.outerHTML = `
+            <section id="oc_container_exersise">
+                <section id="oc_exersise">
+                    <svg id="quitBtn" onclick="hideExersiseInterface()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                    </svg>
+                    <img src="src/datas/img/exercices/`+exercice["titre"]+`.png" onclick="hideExersiseInterface()">
+                    <section id="oc_exersise_description">
+                        <section id="oc_exersise_description_header">
+                            <section id="oc_exersise_description_title">
+                                <h3>`+exercice["titre_affiche"]+`</h3>
+                                <img id="oc_edit_button" src="src/datas/img/assets/logo_modifier.png">
+                            </section>
+                            <img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
+                        </section>
+                        <button id="oc_new_record_button" onclick="clickAddRecord()">Nouveau record</button>
                     </section>
-                    <img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
                 </section>
-                <button id="oc_new_record_button" onclick="clickAddRecord()">Nouveau record</button>
             </section>
-        </section>
-    </section>
-    `;    
+            `;   
+        }
+        else {
+            //Si c est rate
+            throw data["message"]
+        }
+    })                                                 //Recupere la valeur retournee en JSON
+    .catch(err => console.log(err));
+
+     
 }
