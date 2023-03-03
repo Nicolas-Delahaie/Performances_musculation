@@ -12,6 +12,7 @@
     </head>
 <?php
     session_start();
+    // @warning enlever ca
     if (!isset($_SESSION["userId"])){
         //Utilisateur par defaut
         $_SESSION["userId"] = 1;
@@ -25,9 +26,6 @@
 
         $_GET["query"] = "getUserName";
         $user = include"src/dbAccess.php";
-
-        $_GET["query"] = "getCurrentProgramName";
-        $currentProgram = include"src/dbAccess.php";
 
         $_GET["query"] = "getDefaultPrograms";
         $defaultPrograms = include"src/dbAccess.php";
@@ -53,6 +51,7 @@
                 <menu> 
                     <p>".$user."</p>
                     <a>Paramètres</a>
+                    <a href='src/deconnexion.php'>Se deconnecter</a>
                 </menu>
             </nav>
         </header>
