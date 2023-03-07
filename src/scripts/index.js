@@ -1,32 +1,36 @@
 var exoAffiche = false;
-var idExoAffiche = "";
+var idExoAffiche;
 var exercice;
 
 /**
  * @brief Affiche l interface de l exercice clique
  */
-function clicOnExersise(nomExo){
+function clicOnExersise(idExo){
     if (exoAffiche){
-        if (idExoAffiche == nomExo){
+        if (idExoAffiche == idExo){
             //Clic sur un exo deja affiche 
             hideExersiseInterface();
         }
         else{
             //Clic sur un exo non affiche
             hideExersiseInterface();
-            showExersiseInterface(nomExo);
+            showExersiseInterface(idExo);
         }
     }
     else{
         //Aucun exo affiche
-        showExersiseInterface(nomExo);
+        showExersiseInterface(idExo);
     }
 }
 /**
  * @brief Affiche la zone de saisie d'une nouvelle PR
  */
 function clickAddRecord(){
-    //Creation de l element
+    //Creation de la date actuelle
+    let dateActuelle = new Date();
+    let dateFormatee = dateActuelle.toLocaleDateString('fr-FR',  { year: 'numeric', day: '2-digit', month: '2-digit' });
+    dateFormatee = dateFormatee.split('/').reverse().join('-'); //Transformation des "/" en "-"
+
     var zoneDeSaisie = document.createElement("null");    
     document.getElementById('oc_exersise_description').appendChild(zoneDeSaisie);
     document.getElementById('oc_exersise_description').removeChild(document.getElementById('oc_new_record_button'));
@@ -37,7 +41,7 @@ function clickAddRecord(){
                                      <input type="number" name="reps" id="lineEd-reps" value="1">
                                      <p class='rightLabel'>reps</p>
                                      <p id='dateLabel'>Fait le</p> 
-                                     <input type="date" name="date" id="lineEd-date" value="2023-23-02">
+                                     <input type="date" name="date" id="lineEd-date" value="`+dateFormatee+`">
                                  </section>
                                  <button id='bValidate' onclick='clickValidateRecord()'>Valider</button>
                              </section>`;
@@ -46,7 +50,46 @@ function clickAddRecord(){
  * @brief Regarde si les informations sont correctes puis ajoute a la base de donnees
  */
 function clickValidateRecord(){
-    alert('Validation de la conformite des informations puis ajout')
+    poids = document.getElementById("lineEd-weight").value;
+    reps = document.getElementById("lineEd-reps").value;
+    date = document.getElementById("lineEd-date").value;
+    if (poids !== "" && reps != 0){
+        //Poids et reps ont bien ete saisis
+        console.log(idExoAffiche);
+        fetch('./src/scripts/dbAccess.php'+
+                '?for=js'+
+                '&query=addPerf'+
+                '&idExo='+idExoAffiche+
+                '&datePerf='+date+
+                '&repetitions='+reps+
+                '&poids='+poids, 
+            {method: 'GET',})
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur HTTP, status = ' + response.status);
+            }
+            return response.json();
+        })                                      //Verifie que la requete s est bien deroulee
+        .then(data => {
+            if (data["status"] == "success"){
+                //Si c est reussi
+                alert('Performance bien ajoutée');
+                hideExersiseInterface();
+            }
+            else {
+                //Si c est rate
+                throw new Error(data["message"]);
+            }
+        })                                                 //Recupere la valeur retournee en JSON
+        .catch(err => {
+            console.log(err);
+            alert("Performance non enregistrée");
+        });
+    }
+    else{
+        //Aucun poids n a ete saisie
+        alert("Selectionnez un poids");
+    }
 }
 /**
  * @brief Met a jour les elements de l exercice clique avec les infos de la bdd
@@ -77,7 +120,7 @@ function initialiseExerciceBDD(){
 function hideExersiseInterface(){
     document.body.removeChild(document.getElementById("oc_container_exersise"))
     exoAffiche = false;
-    idExoAffiche = "";
+    idExoAffiche = null;
 }
 /** @brief Ajotue l interface de l exercice clique */
 function showExersiseInterface(idExo){     
@@ -85,7 +128,7 @@ function showExersiseInterface(idExo){
     exoAffiche = true;
     idExoAffiche = idExo;
     // initialiseExerciceBDD();
-    fetch('./src/dbAccess.php'+
+    fetch('./src/scripts/dbAccess.php'+
           '?for=js'+
           '&query=getExersiseInformations'+
           '&idExersise='+idExo, 
@@ -127,7 +170,7 @@ function showExersiseInterface(idExo){
         }
         else {
             //Si c est rate
-            throw data["message"]
+            throw new Error(data["message"]);
         }
     })                                                 //Recupere la valeur retournee en JSON
     .catch(err => console.log(err));

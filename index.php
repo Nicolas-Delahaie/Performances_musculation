@@ -8,50 +8,84 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="src/styles/mainPage.css">
         <link rel="stylesheet" href="src/styles/index.css">
-        <script src="src/scripts.js" async defer></script>
+        <script src="src/scripts/index.js" async defer></script>
     </head>
 <?php
     session_start();
-    // @warning enlever ca
+
     if (!isset($_SESSION["userId"])){
         //Utilisateur par defaut
-        $_SESSION["userId"] = 1;
+        $nonConnecte = true;
     }
-    if (!isset($_SESSION["programId"])){
-        $_SESSION['programId'] = 1;
+    else{
+        $nonConnecte = false;
     }
 
     try{
         $_GET["for"] = "php";
 
-        $_GET["query"] = "getUserName";
-        $user = include"src/dbAccess.php";
+        if (!$nonConnecte){
+            //Nom de l utilisateur
+            $_GET["query"] = "getUserName";
+            $user = include"src/scripts/dbAccess.php";
+            
+            //Programmes prives lies au programme actuel
+            $_GET["query"] = "getPrivatesPrograms";
+            $privatePrograms = include"src/scripts/dbAccess.php";
+        
+            //Exercices
+            if (isset($_GET["searchValue"]) and $_GET["searchValue"] != ""){
+                //On va trier uniquement les exercices lies a la recherche
+                $_GET["query"] = "getAllExersisesInformations";
+                $exersisesDB = include"src/scripts/dbAccess.php";
+                $exersises = [];
+                foreach($exersisesDB as $exersiseDB){
+                    if (mb_stripos($exersiseDB["titre_affiche"], $_GET["searchValue"]) !== false){
+                        //Le titre de l exercice contient la recherche
+                        array_push($exersises, $exersiseDB);
+                    }
+                }
+            }
+            else{
+                $_GET["query"] = "getExersisesInformations";
+                $exersises = include"src/scripts/dbAccess.php";
+            }
+        }
+        else{
+            $user = [];            
+            $privatePrograms = [];
+            $exersises = [];
+                
+        }
 
+        //Programmes par defauts
         $_GET["query"] = "getDefaultPrograms";
-        $defaultPrograms = include"src/dbAccess.php";
-
-        $_GET["query"] = "getPrivatesPrograms";
-        $privatePrograms = include"src/dbAccess.php";
-
-        $_GET["query"] = "getExersisesInformations";
-        $exersises = include"src/dbAccess.php";
+        $defaultPrograms = include"src/scripts/dbAccess.php";
     }
     catch(Exception $e){
-        echo $e->getMessage();
+        echo $e->getMessage()    ;
     }
 
     // -- H E A D E R --
     echo "
     <body>        
         <header>
-            <img src='src/datas/img/assets/logo.jpg' id='logo' onclick='showExersiseInterface()'>
+            <img src='src/datas/img/assets/logo.jpg' id='logo'>
             <h1>Peng Records</h1>
 
             <nav>
-                <menu> 
-                    <p>".$user."</p>
-                    <a>Paramètres</a>
-                    <a href='src/deconnexion.php'>Se deconnecter</a>
+                <menu>";
+    if (!$nonConnecte){
+        echo "
+        <p>".$user."</p>
+        <a href='src/scripts/deconnexion.php'>Se deconnecter</a>
+        <a>Paramètres</a>";
+    }
+    else{
+        echo "<a href='src/pageIdentification.php'>Connexion</a>";
+    }
+                    
+    echo "
                 </menu>
             </nav>
         </header>
@@ -60,17 +94,18 @@
 
     // -- P R O G R A M M E S --
     foreach ($defaultPrograms as $program){
-        echo "<a href='./src/programChange.php?program=".$program["id_PROGRAMME"]."'>".$program["nom"]."</a>";
+        echo "<a href='./src/scripts/programChange.php?program=".$program["id_PROGRAMME"]."'>".$program["nom"]."</a>";
     }
     foreach ($privatePrograms as $program){
-        echo "<a href='./src/programChange.php?program=".$program["id_PROGRAMME"]."'>".$program["nom"]."</a>";
+        echo "<a href='./src/scripts/programChange.php?program=".$program["id_PROGRAMME"]."'>".$program["nom"]."</a>";
     }
     echo "<a>+</a>";
 
     echo '  </section>
             
-            <form id="researchZone">
-                <input type="text" id="searchBar" placeholder="Rechercher un exercice">
+            <form id="researchZone" method="GET">
+                <input id="searchBar" name="searchValue" type="text" placeholder="Rechercher un exercice">
+                <button type="submit">Valider</button>
             </form>
 
             <section id="exercisesZone">';

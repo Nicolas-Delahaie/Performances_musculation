@@ -7,5 +7,7 @@ if (!isset($_GET["program"])){
 }
 session_start();
 $_SESSION['programId'] = $_GET["program"];
-header("Location: ./../index.php")
+unset($_GET["searchValue"]);
+
+header("Location: ./../../index.php");
 ?>

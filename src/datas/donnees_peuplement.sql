@@ -9,11 +9,14 @@ INSERT INTO `EXERCICE`(`titre`, `titre_affiche`, `auPoidsDuCorps`) VALUES
 ("pushups", "Pompes", true),
 ("supine_pull-ups", "Tractions supination", true),
 ("pronation_pull-ups", "Tractions pronation", true),
-("deadlift", "Soulevé de terre", false);
+("deadlift", "Soulevé de terre", false),
+('user6_1','Astication de poulie',false,6);
 
 INSERT INTO `UTILISATEUR`(`mail`, `prenom`, `mot_de_passe`) VALUES 
 ("root@root.root", "root", "root"),
-("ralonzo@iutbayonne.univ-pau.fr", "Robin", "bibite");
+("ralonzo@iutbayonne.univ-pau.fr", "Robin", "bibite"),
+("mathis.lague@gmail.com", "Mathis", "mathis"),
+("nico601.delahaie@gmail.com", "Nico", "batata");
 
 INSERT INTO `PROGRAMME`(`nom`, `id_UTILISATEUR`) VALUES 
 ("PUSH",NULL),("PULL",NULL),("LEGS",NULL),

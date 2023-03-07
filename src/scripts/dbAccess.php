@@ -8,15 +8,15 @@
  * @details = "getPrivatesPrograms" : Renvoie le nom et l id des programmes crees par $_SESSION["userId"]
  * @details = "getExersiseInformations" : Renvoie les informations liees de l exercice $_GET["idExersise"] de l utilisateur $_SESSION["userId"]
  * @details = "getExersisesInformations" : Renvoie les informations de tous les exercices du programme $_SESSION["programId"] de l utilisateur $_SESSION["userId"]
+ * @detials = "getAllExersisesInformations" : Renvoie les informations de tous les exercices (sauf ceux créés par les autres utilisateurs)
+ * @details = "addPerf" : Ajoute une performance a la bdd a partir de GET(["idExo"], ["datePerf"], ["repetitions"], ["poids"])
+ * @details = "getPass" : Recupere le mot de passe crypte de $mail
  * @return mixed
  */
 
 
 $get;           //Indique si la requete doit renvoyer un resultat
 $notInMemory;   //Indique si la reponse demandee est deja en memoire
-
-$memoryIds = [];        //Contient les id des reponses deja renvoyees
-$memoryContent = [];    //Contient le contenu des reponses deja renvoyees
 $erreur = false;
 
 //Declarations
@@ -48,25 +48,37 @@ if (!defined("BDD_NOM")){
     define("DB_WRITER_USER_ID", "294941_writer");
     define("DB_WRITER_USER_PASS", "*ùjcrH_è89762à':;,");
 }
+if (!isset($_SESSION["programsInMemory"])){
+    $_SESSION["programsInMemory"] = [];
+}
+if (!isset($_SESSION["exersisesIdsInMemory"]) or !isset($_SESSION["exersisesInMemory"])){
+    $_SESSION["exersisesIdsInMemory"] = [];
+    $_SESSION["exersisesInMemory"] = [];
+}
 
-//Verif-Execution
+//Envoi de la requete
 try{
     //Verification des parametres
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
+    if (!isset($_GET["query"])){
+        //Aucune requete mise en parametre
+        throw new Exception ("Necessite une requete en parametre GET");
+    }
     if (!isset($_SESSION["userId"])){
         //Aucun utilisateur connecte
-        throw new Exception ("Impossible d'accceder aux donnees sans etre connecte");
+        if ($_GET["query"] != "getPass" and 
+            $_GET["query"] != "getDefaultPrograms"){
+            //Sauf dans le cas ou aucun utilisateur n a besoins d etre connecte pour executer la requete
+            throw new Exception ("Impossible d'accceder aux donnees sans etre connecte");
+        }
     }       
     if (!isset($_GET["for"])){
         //Doit preciser le type de retour
         throw new Exception ('Le script doit savoir quel type de donnee il doit renvoyer dans $_GET["for"] (php par defaut)');
     }
-    if (!isset($_GET["query"])){
-        //Aucune requete mise en parametre
-        throw new Exception ("Necessite une requete en parametre GET");
-    }
+    
 
     //Analyse des parametres (requetage ou recuperation)
     switch ($_GET["query"]) {
@@ -76,7 +88,7 @@ try{
             $typeReponse = new TypeReponse("1","1");
 
             //Definie la maniere pour recuperer l information
-            if (!isset($memoryContent["userNames"][$_SESSION["userId"]])){
+            if (true){
                 //N existe pas en memoire
                 $notInMemory = true;
                 $sql = "SELECT prenom FROM UTILISATEUR WHERE id_UTILISATEUR =".$_SESSION['userId'].";"; 
@@ -93,7 +105,7 @@ try{
             $typeReponse = new TypeReponse("X","X");
 
             //Definie la maniere pour recuperer l information
-            if (!isset($memoryContent["defaultPrograms"])){
+            if (true){
                 //N existe pas en memoire
                 $notInMemory = true;
                 $sql = "SELECT id_PROGRAMME,nom FROM PROGRAMME WHERE id_UTILISATEUR IS NULL;"; 
@@ -110,7 +122,7 @@ try{
             $typeReponse = new TypeReponse("X","X");
 
             //Definie la maniere pour recuperer l information
-            if (!isset($memoryContent["pivatePrograms"])){
+            if (true){
                 //N existe pas en memoire
                 $notInMemory = true;
                 $sql = "SELECT id_PROGRAMME,nom FROM PROGRAMME WHERE id_UTILISATEUR =".$_SESSION['userId'].";"; 
@@ -130,7 +142,7 @@ try{
             $typeReponse = new TypeReponse("1","X"); 
             
             //Definie la maniere pour recuperer l information
-            if (!isset($memoryContent["exersises"])){
+            if (true){
                 //N existe pas en memoire
                 $notInMemory = true;
                 $sql = "SELECT E.titre, E.titre_affiche, E.auPoidsDeCorps, P.repetitions, P.kilos 
@@ -148,38 +160,105 @@ try{
             break;
     
         case 'getExersisesInformations':
+            if (!isset($_SESSION["programId"])){
+                throw new Exception("Un programme doit etre selectionne");
+            }
+
             //Definie le type de reponse
             $get = true;
             $typeReponse = new TypeReponse("X","X");
 
             //Definie la maniere pour recuperer l information
-            if (!isset($memoryContent["exersises"])){
+            if (true){
                 //N existe pas en memoire
                 $notInMemory = true;
                 $sql = "SELECT E.id_EXERCICE, E.titre, E.titre_affiche, E.auPoidsDeCorps, P.repetitions, P.kilos 
-                    FROM EXERCICE E 
-                    LEFT JOIN PERFORMANCE P ON P.id_EXERCICE = E.id_EXERCICE
-                    INNER JOIN EXERCICE_PROGRAMME_UTILISATEUR EPU ON EPU.id_EXERCICE = E.id_EXERCICE
-                    WHERE EPU.id_UTILISATEUR = ".$_SESSION['userId']." AND 
+                        FROM EXERCICE E 
+                        LEFT JOIN (
+                            SELECT id_EXERCICE, MAX(date_perf), repetitions, kilos
+                            FROM PERFORMANCE
+                            GROUP BY id_EXERCICE
+                        ) AS P ON P.id_EXERCICE = E.id_EXERCICE
+                        INNER JOIN EXERCICE_PROGRAMME_UTILISATEUR EPU ON EPU.id_EXERCICE = E.id_EXERCICE 
+                        WHERE EPU.id_UTILISATEUR = ".$_SESSION['userId']." AND 
                             EPU.id_PROGRAMME = ".$_SESSION["programId"]."
-                    GROUP BY E.titre;"; 
+                        GROUP BY E.titre";
             }
             else{
                 //Existe en memoire
                 $notInMemory = false;
             }
             break;
-            
+        
+        case 'getAllExersisesInformations':
+            //Definie le type de reponse
+            $get = true;
+            $typeReponse = new TypeReponse("X","X");
+
+            //Definie la maniere pour recuperer l information
+            if (true){
+                //N existe pas en memoire
+                $notInMemory = true;
+                $sql = "SELECT E.id_EXERCICE, E.titre, E.titre_affiche, E.auPoidsDeCorps, P.repetitions, P.kilos 
+                        FROM EXERCICE E 
+                        LEFT JOIN (
+                            SELECT id_EXERCICE, MAX(date_perf), repetitions, kilos
+                            FROM PERFORMANCE
+                            GROUP BY id_EXERCICE
+                        ) AS P ON P.id_EXERCICE = E.id_EXERCICE
+                        WHERE E.id_UTILISATEUR = ".$_SESSION['userId']." OR
+                        	  E.id_UTILISATEUR IS NULL
+                        ORDER BY E.titre_affiche";
+            }
+            else{
+                //Existe en memoire
+                $notInMemory = false;
+            }
+            break;
+
+        case 'addPerf':
+            if (!isset($_GET["idExo"])){
+                throw new Exception("Un exercice doit etre selectionne");
+            }
+            if (!isset($_GET["datePerf"])){
+                throw new Exception("La performance doit etre datée");
+            }
+            if (!isset($_GET["repetitions"])){
+                throw new Exception("La performance doit avoir un nombre de repetitions");
+            }
+            if (!isset($_GET["poids"])){
+                throw new Exception("La performance doit avoir un poids");
+            }
+
+            $get = false;
+            $typeReponse = null;
+            $sql = "INSERT INTO `PERFORMANCE`( `date_perf`, `repetitions`, `kilos`, `id_EXERCICE`, `id_UTILISATEUR`) VALUES 
+            ('".$_GET["datePerf"]."',".$_GET["repetitions"].",".$_GET["poids"].",".$_GET["idExo"].",".$_SESSION["userId"].")"; 
+            break;
+
+        case 'getPass':
+            if (!isset($mail)){
+                throw new Exception('La variable "mail" doit etre entree en php');
+            }
+
+            //Definie le type de reponse
+            $get = true;
+            $typeReponse = new TypeReponse("1","X");
+            $notInMemory = true;
+            $sql = "SELECT id_UTILISATEUR, mot_de_passe 
+                    FROM UTILISATEUR
+                    WHERE mail='$mail'";
+            break;
+
         default:
             throw new Exception ('Requete "'.$_GET["query"].'" invalide'); break;
     }
 
     //Envoi de la requete
-    if (!$get or $notInMemory){
-        //Si on veut (executer une simple requete) OU si on veut (chercher des donnees depuis la BDD)
-        //Ouverture (avec droits coherents)
+    if (!($get and !$notInMemory)){
+        //Envoi sauf si on veut recevoir une donnee deja en memoire
         try{
-            //Mise des droits
+            //Ouverture de la BDD avec droits adaptes
             if ($get){
                 //Lecture
                 $bdd = new PDO('mysql:host='.BDD_HOTE.';dbname='.BDD_NOM.';charset=utf8', DB_READER_USER_ID, DB_READER_USER_PASS);
@@ -198,15 +277,19 @@ try{
         }
     }
 
-    //Recuperation des resultats
+    //Recuperation du resultat
     if ($get){
         if ($notInMemory){        
             //Depuis la requete           
             $tuples = $requete->fetchAll();
-    
-            //Mise au propre de la reponse
+
+            //Mise en forme de la reponse           
             if ($typeReponse->nbTuples == "1"){
-                if ($typeReponse->nbValeurs == "1"){
+                if ($tuples == []){
+                    //Aucune valeur trouvee
+                    $reponse = NULL;
+                }
+                else if ($typeReponse->nbValeurs == "1"){
                     //Valeur unique
                     $reponse = $tuples[0][0];
                 }
@@ -216,75 +299,77 @@ try{
                 }
             }
             else if ($typeReponse->nbTuples == "X"){
-                if ($typeReponse->nbValeurs == "1"){
+                if ($tuples == []){
+                    //Aucune valeur trouvee
+                    $reponse = [];
+                }
+                else if ($typeReponse->nbValeurs == "1"){
                     //Liste simple
                     foreach ($tuples as &$tuple){
                         $tuple = $tuple[0]; //On recupere l element 0 de chaque tuple pour garder que l essentiel
                     }
                     $reponse = $tuples;
                 }
-                elseif ($typeReponse->nbValeurs == "X"){
+                else if ($typeReponse->nbValeurs == "X"){
                     $reponse = $tuples;
                 }
             }
+            
 
-            //Mise en memoire des valeurs de la reponse
-            switch ($_GET["query"]){
-                case 'getUserName': 
-                    $memoryContent["userNames"][$_SESSION["userId"]] = $reponse;
-                    break;
-        
-                // case 'getDefaultPrograms':
-                //     $memoryContent["defaultPrograms"] = $reponse;
-                //     break;
-        
-                // case 'getPrivatesPrograms': 
-                //     $memoryContent["privatesPrograms"] = $reponse;
-                //     break;
-            
-                // case 'getExersiseInformations': 
-                //     //Pre condition : ne pas deja l avoir en memoire 
-                //     //Garde en memoire l id de l exercice
-                //     array_push($memoryContent["exersisesIdInMemory"], $reponse);
-                //     array_push($memoryContent["exersises"], $reponse);
-                //     break;
-            
-                // case 'getExersisesInformations': 
-                //     foreach($reponse as $exercice){
-                //         if ($exercice["id_EXERCICE"]){
-                //             //L exercice n est pas encore en memoire
-                //             //Garde en memoire l id de l exercice
-                //             array_push($memoryContent["exersisesIdInMemory"], $reponse);
-                //             array_push($memoryContent["exersises"], $reponse);
-                //         }
-                //     }                
-                //     break;
-            }
-        }
+        } 
         else{
             //Depuis la memoire
             switch ($_GET["query"]) {
                 case 'getUserName': 
                     $reponse = $memoryContent["userNames"][$_SESSION["userId"]];
                     break;
-            
+                    
                 case 'getDefaultPrograms':
-                    $reponse = "oui";
                     break;
-            
+                    
                 case 'getPrivatesPrograms': 
-                    $reponse = "oui";
                     break;
             
                 case 'getExersiseInformations': 
-                    $reponse = "oui";
                     break;
             
                 case 'getExersisesInformations':
-                    $reponse = "oui";
                     break;
-            }
+                }
         }
+    }
+
+    //Mise en memoire des valeurs de la reponse
+    if ($get and $notInMemory){
+        switch ($_GET["query"]){
+            case 'getUserName': 
+                
+                break;
+        
+            case 'getDefaultPrograms':
+                break;
+        
+            case 'getPrivatesPrograms': 
+                break;
+        
+            case 'getExersiseInformations': 
+                break;
+        
+            case 'getExersisesInformations':                 
+                //Sauvegarde des exercices
+                foreach($reponse as $exercice){
+                    if (!in_array($exercice["id_EXERCICE"], $_SESSION["exersisesIdsInMemory"])){
+                        //Si l exercice n est pas deja en memoire
+                        array_push($_SESSION["exersisesIdsInMemory"], $exercice["id_EXERCICE"]);
+                        array_push($_SESSION["exersisesInMemory"], $exercice);
+                    }
+                }
+                
+                //Liaison avec le programme les contenant
+                array_push($_SESSION["programsInMemory"], $_SESSION["programId"]);
+                $_SESSION["programsInMemory"] = [];
+                break;
+        }  
     }
 }
 catch(Exception $e){
@@ -297,13 +382,16 @@ if ($_GET["for"] == "js"){
     if ($erreur){
         echo json_encode(["status"=>"fail","message"=>$exception->getMessage()]);
     }
-    else{
+    else if ($get){
         echo json_encode(["status"=>"success","datas"=>$reponse]);
+    }
+    else{
+        echo json_encode(["status"=>"success"]);
     }
 }
 else{
     if ($erreur){
-        throw new Exception($reponse);
+        throw new Exception($exception);
     }
     else if ($get){
         return $reponse;
