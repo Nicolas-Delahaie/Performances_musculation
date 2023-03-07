@@ -39,8 +39,25 @@
                 $_GET["query"] = "getAllExersisesInformations";
                 $exersisesDB = include"src/scripts/dbAccess.php";
                 $exersises = [];
+                
+                $trans_table = [
+                    'À' => 'A', 'Â' => 'A', 'Ä' => 'A', 'Æ' => 'AE',
+                    'Ç' => 'C', 'È' => 'E', 'É' => 'E', 'Ê' => 'E',
+                    'Ë' => 'E', 'Î' => 'I', 'Ï' => 'I', 'Ô' => 'O',
+                    'Œ' => 'OE', 'Ù' => 'U', 'Û' => 'U', 'Ü' => 'U',
+                    'à' => 'a', 'â' => 'a', 'ä' => 'a', 'æ' => 'ae',
+                    'ç' => 'c', 'è' => 'e', 'é' => 'e', 'ê' => 'e',
+                    'ë' => 'e', 'î' => 'i', 'ï' => 'i', 'ô' => 'o',
+                    'œ' => 'oe', 'ù' => 'u', 'û' => 'u', 'ü' => 'u',
+                    'ß' => 'ss'
+                ];
+
                 foreach($exersisesDB as $exersiseDB){
-                    if (mb_stripos($exersiseDB["titre_affiche"], $_GET["searchValue"]) !== false){
+                    //En minuscule et sans accents
+                    $titre = mb_strtolower(strtr($exersiseDB["titre_affiche"], $trans_table)); // convertir les caractères accentués en caractères ASCII
+                    $recherche = mb_strtolower(strtr($_GET["searchValue"], $trans_table));
+                    
+                    if (mb_stripos($titre, $recherche) !== false){
                         //Le titre de l exercice contient la recherche
                         array_push($exersises, $exersiseDB);
                     }
