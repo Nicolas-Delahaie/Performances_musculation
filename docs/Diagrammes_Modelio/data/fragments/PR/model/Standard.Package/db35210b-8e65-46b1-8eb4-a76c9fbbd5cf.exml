@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="pr" version="4">
+  <OBJECT>
+    <ID name="pr" mc="Standard.Package" uid="db35210b-8e65-46b1-8eb4-a76c9fbbd5cf"/>
+    <PID name="PR" mc="Standard.Project" uid="e4d08a0b-d683-4ede-a953-c3eb1cb3dc24"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[pr]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="Utilisateur" mc="Standard.Actor" uid="56704b15-7e3f-4057-9581-8942cdec5957"/>
+        <COMPID name="regarder ses progrès" mc="Standard.UseCase" uid="cf03dd74-ec37-4ce5-9c94-16003ac19b6e"/>
+        <COMPID name="Entrer des PR" mc="Standard.UseCase" uid="c871df93-6f82-422e-86cd-fd2a73fab27c"/>
+        <COMPID name="Gerer un exercice" mc="Standard.UseCase" uid="1b71585d-c066-41bb-9f68-48245fbe851f"/>
+        <COMPID name="Changer la photo" mc="Standard.UseCase" uid="a8c32089-525c-477f-841c-4930ec44bda0"/>
+        <COMPID name="Modifier la description" mc="Standard.UseCase" uid="f877d0be-782a-42df-a1a6-70d1e0c0fa1a"/>
+        <COMPID name="Changer le nom (mis en italyqiue)" mc="Standard.UseCase" uid="809ddbd9-9895-4a0f-b6d8-93b6b5b69e3a"/>
+        <COMPID name="Se déconnecter" mc="Standard.UseCase" uid="70d3dc22-8d82-490e-a2a6-0ac2a2d392f5"/>
+        <COMPID name="Créer une exercice" mc="Standard.UseCase" uid="ce3a0892-956f-434e-841f-9c6e6e98d269"/>
+        <COMPID name="Gérer des programmes d'entrainement" mc="Standard.UseCase" uid="766f5494-8343-415b-ab25-e7d26f0646fc"/>
+        <COMPID name="fabriquer un programme" mc="Standard.UseCase" uid="a3156a08-6f2c-47fa-8fdd-154128a521da"/>
+        <COMPID name="Modifer les favoris" mc="Standard.UseCase" uid="b9e0ebca-723f-47a6-839b-40594df0600e"/>
+        <COMPID name="Supprimer des favoris" mc="Standard.UseCase" uid="9179a617-950e-4243-b6b1-b6b78e908b51"/>
+        <COMPID name="Ajotuer aux favoris" mc="Standard.UseCase" uid="1096f7bf-d6d0-4575-9691-1ab90fbfa20a"/>
+        <COMPID name="Administrateur" mc="Standard.Actor" uid="f0b2197a-01d0-4419-b04d-5151acd4c6e9"/>
+        <COMPID name="Gérer le compte" mc="Standard.UseCase" uid="122e824d-8ca6-4c30-82ad-a776a35ac9ca"/>
+        <COMPID name="Se connecter" mc="Standard.UseCase" uid="319ab565-665d-4279-b241-283f377f67bf"/>
+        <COMPID name="Gérer exerices" mc="Standard.UseCase" uid="7b7becb2-cdc0-42a3-9f8a-829e0b08da9e"/>
+        <COMPID name="Ajouter un nouvel exercice" mc="Standard.UseCase" uid="28778d41-d09b-4215-bd1e-c804426440c9"/>
+        <COMPID name="Modifer un exercice deja existant" mc="Standard.UseCase" uid="bd57213b-7848-4d67-b412-e33bb48e4544"/>
+        <COMPID name="changer de norme (kg/lbs)" mc="Standard.UseCase" uid="e8f32348-7bf3-46eb-a70d-ebd7398a790a"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="Diagramme de cas d'utilisation pr" mc="Standard.UseCaseDiagram" uid="14a86341-e7e8-4ba7-abaf-7be47004c259"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
