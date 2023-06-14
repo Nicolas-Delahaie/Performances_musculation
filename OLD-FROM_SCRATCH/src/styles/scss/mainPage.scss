@@ -1,0 +1,158 @@
+// ./src/dart-sass/sass src/style_scss/pageEvenements.scss src/style/pageEvenements.css --watch
+img{
+    width: 100%;
+}
+
+
+header{
+    display:grid;
+    grid-template-columns: 200px 1fr min-content;
+    img{
+        width:100%;
+        height:200px;
+        border-radius:100px;
+    }
+    h1{
+        text-align: center;
+    }
+}
+
+main{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+
+    #programsZone{
+        display: inline;
+
+        a {
+            width: min-content;
+            min-width: 80px;
+            margin: 0px 10px;
+            padding: 5px;
+            background-color: var(--gris);
+            text-align: center;
+        hover{
+               background-color: var(--jaune);
+           }
+        }
+    }
+
+    #researchZone > input{
+        margin-top: 30px;
+        width: 600px;
+    }
+
+    #exercisesZone{
+        display: grid;
+        margin: 40px 100px;
+        grid-template-columns: repeat(5, 1fr);
+
+        .directories, .exersises{
+            padding: 20px;
+            margin: 10px;
+        }
+        .exersises{
+            border: 2px solid black;
+
+            .imgExersise {
+                object-fit: contain;
+                height: 200px;
+            }
+            .exersiseTitleZone{
+                display:grid;
+                grid-template-columns: 1fr 20px 40px;
+
+                h2{
+                    margin: 0px;
+                }
+                .imgStar{
+                    width: 100%;
+                }
+            }
+        }
+        .directories{
+            position:relative;
+            .imgDir{
+                height:100%;
+                object-fit: contain;
+                height: 200px;
+            }
+            h2{
+                position:absolute;
+                bottom: 30px;
+                width:85%;
+                text-align:center;
+            }
+        }
+    }
+}
+
+#oc_container_exersise{
+    position:fixed;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events:none;    
+    
+    #oc_exersise{
+        width : 500px;
+        height: min-content;
+        border: 5px solid black;
+        border-radius: 30px;
+        padding: 20px;
+        background-color: white;
+        pointer-events:auto;      
+        
+        #quitBtn{
+            position:absolute;
+            justify-self:end;
+            width: 60px;
+        }
+        #oc_exersise_img{
+            object-fit: contain;
+        }
+        section{
+            text-align: center;
+            
+            section{
+                display:grid;
+                grid-template-columns: 1fr min-content;
+                
+                section {
+                    h3 {
+                        height:100%;
+                        margin:0px;
+                        align-self:center;
+                        display: flex;
+                        justify-self: center;
+                        align-self: end;
+                        height: min-content;
+                    }
+                    #oc_edit_button{
+                        height: 30px;
+                        width:30px;
+                        margin-left: 20px;
+                    }
+                }
+                #oc_favorite_button{
+                    width: 50px;
+                    top:0px;
+                    right: 0px;
+                    margin-left: 15px;
+                }
+            }
+            #oc_new_record_button {
+                display: inline;
+                justify-self: center;
+                width: 80%;
+                height: 40px;
+                margin: 20px;
+                border-radius: 20px;;
+            }
+        }
+    }
+}

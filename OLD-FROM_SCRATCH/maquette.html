@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="src/styles/mainPage.css">
+        <link rel="stylesheet" href="src/styles/index.css">
+        <script src="src/scripts.js" async defer></script>
+    </head>
+    <body>
+        <!-- <section id="oc_container_exersise">
+            <section id="oc_exersise">
+                <svg id="quitBtn" onclick="removeExersiseInterface()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+                <img src="src/datas/img/exercices/deadlift_halteres.png">
+                <section id="oc_exersise_description">
+                    <section>
+                        <section id="oc_exersise_description_title">
+                            <h3>Soulevé de terre haltère</h3><img id="oc_edit_button"
+                                src="src/datas/img/assets/logo_modifier.png">
+                        </section><img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
+                    </section>
+                    <button id="oc_new_record_button">New reccord</button>
+                </section>
+            </section>
+        </section> -->
+        <section id="oc_container_exersise">
+            <section id="oc_exersise">
+                <svg id="quitBtn" onclick="removeExersiseInterface()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+                <img src="src/datas/img/exercices/deadlift_halteres.png">
+                <section id="oc_exersise_description">
+                    <section>
+                        <section id="oc_exersise_description_title">
+                            <h3>Soulevé de terre haltère</h3><img id="oc_edit_button"
+                                src="src/datas/img/assets/logo_modifier.png">
+                        </section><img id="oc_favorite_button" src="src/datas/img/assets/etoilePleine.svg">
+                    </section>
+                    <section id="oc_exersise_new_record">
+                        <section>
+                            <input type="number" name="weight" id="lineEd-weight">
+                            <p>kg</p>
+                            <input type="number" name="reps" id="lineEd-reps">
+                            <p>reps</p>
+                            <p>Fait le</p> 
+                            <input type="date" name="date" id="lineEd-date" value="23/02/2023">
+                        </section>
+                        <button id='bValidate' onclick='clickAddRecord()'>Nouveau record</button>
+                    </section>
+                </section>
+            </section>
+        </section>
+
+        <header>
+            <img src="src/datas/img/assets/logo.jpg" id="logo">
+            <h1>Peng Records</h1>
+
+            <nav>
+                <menu> 
+                    <p>Nicolas</p>
+                    <a>Paramètres</a>
+                </menu>
+            </nav>
+        </header>
+        <main>
+            <section id="categoriesZone">
+                <a>TOUT</a>
+                <a>PULL</a>
+                <a>PUSH</a>
+                <a>LEGS</a>
+                <a>+</a>
+            </section>
+            
+            <form id="researchZone">
+                <input type="text" id="searchBar" placeholder="Rechercher un exercice">
+            </form>
+
+            <section id="exercisesZone">
+                <section class="exersises" onclick="clicOnExersise('pompe')">
+                    <img class="imgExersise" src="src/datas/img/exercices/pushups.png">
+                    <section class="exersiseDescription">
+                        <section class="exersiseTitleZone">
+                            <h2>Pushups</h2>
+                            <img src="src/datas/img/assets/etoilePleine.svg" class="imgStar">
+                        </section>
+                        <p>30 reps</p>
+                    </section>
+                </section>
+
+                <section class="exersises" onclick="clicOnExersise('deadlift_halteres')">
+                    <img class="imgExersise" src="src/datas/img/exercices/deadlift_halteres.png">
+                    <section class="exersiseDescription">
+                        <section class="exersiseTitleZone">
+                            <h2>Deadlift haltères</h2>
+                            <img src="src/datas/img/assets/etoilePleine.svg" class="imgStar">
+                        </section>
+                        <p>100 kg</p>
+                    </section>
+                </section>
+
+                <section class="directories">
+                    <h2>PECS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>BICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>QUADRICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+
+
+
+
+                <section class="directories">
+                    <h2>PECS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>BICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>QUADRICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+                <section class="directories">
+                    <h2>PECS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>BICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>QUADRICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+                <section class="directories">
+                    <h2>PECS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>BICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>QUADRICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+                <section class="directories">
+                    <h2>PECS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>BICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>QUADRICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+                <section class="directories">
+                    <h2>PECS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>BICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+
+                <section class="directories">
+                    <h2>QUADRICEPS</h2>
+                    <img src="src/datas/img/assets/imgDossier.png" class="imgDir">
+                </section>
+                
+            </section>
+        </main>
+    </body>
+</html>
+
+
