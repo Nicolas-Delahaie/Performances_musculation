@@ -1,0 +1,19 @@
+.carteExercice {
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+    height: 400px;
+    width: 300px;
+    padding: 0px 20px;
+    margin: 10px;
+
+    border-radius: 15px;
+    border: 2px solid black;
+    box-sizing: border-box;
+
+    img {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        object-fit: contain;
+    }
+}

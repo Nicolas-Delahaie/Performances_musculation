@@ -1,0 +1,37 @@
+#header {
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 100px;
+        border-radius: 50%;
+    }
+
+    h1 {
+        text-align: center;
+        flex: 1;
+    }
+
+    .zoneDroite>a {
+        display: flex;
+    }
+
+}
+
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .filtres {
+        .programmes {
+            .selectionne {
+                background-color: #e0e0e0;
+            }
+        }
+    }
+
+    .exercices {
+        display: flex;
+    }
+}
