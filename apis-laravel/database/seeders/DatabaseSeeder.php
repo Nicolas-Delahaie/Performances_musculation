@@ -58,14 +58,15 @@ class DatabaseSeeder extends Seeder
             ['nom' => 'Astication de poulie', 'poidsDeCorps' => false],
         ];
         foreach ($exercices as $exercice) {
+            $exercice['createur_id'] = null;
             Exercice::create($exercice);
         }
 
         // PROGRAMMES
         $programmes = [
-            ['nom' => 'push'],
-            ['nom' => 'pull'],
-            ['nom' => 'legs'],
+            ['nom' => 'push', 'createur_id' => null],
+            ['nom' => 'pull', 'createur_id' => null],
+            ['nom' => 'legs', 'createur_id' => null],
             //Faire attention a positionner ca derriere la creation de user
             ['nom' => 'lundi', 'createur_id' => 1],
             ['nom' => 'jeudi', 'createur_id' => 1],

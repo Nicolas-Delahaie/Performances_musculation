@@ -10,6 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         // -------------------------- CREATION DES TABLES --------------------------
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -25,8 +27,9 @@ return new class extends Migration {
             $table->dateTime("date_perf");
             $table->unsignedSmallInteger("repetitions");
             $table->unsignedSmallInteger("charge")->nullable();
-            $table->unsignedBigInteger("user_id");
-            $table->unsignedBigInteger("exercice_id");
+
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('exercice_id')->constrained();
         });
         Schema::create('muscles', function (Blueprint $table) {
             $table->id();
@@ -35,48 +38,30 @@ return new class extends Migration {
         Schema::create('muscles_travailles', function (Blueprint $table) {
             $table->id();
             $table->decimal("solicitation", 4, 3);
-            $table->unsignedBigInteger("exercice_id");
-            $table->unsignedBigInteger("muscle_id");
+
+            $table->foreignId('exercice_id')->constrained();
+            $table->foreignId('muscle_id')->constrained();
             $table->unique(["exercice_id", "muscle_id"]);
         });
         Schema::create('exercices', function (Blueprint $table) {
             $table->id();
             $table->string("nom");
             $table->boolean("poidsDeCorps");
-            $table->unsignedBigInteger("createur_id")->nullable();
+            $table->foreignId('createur_id')->nullable()->constrained(table: 'users')->nullable();
+            ;
         });
         Schema::create('programmes', function (Blueprint $table) {
             $table->id();
             $table->string("nom");
             $table->timestamps();
-            $table->unsignedBigInteger("createur_id")->nullable();
+            $table->foreignId('createur_id')->nullable()->constrained(table: 'users');
+            ;
         });
         Schema::create('exercices_programmes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("exercice_id");
-            $table->unsignedBigInteger("programme_id");
+            $table->foreignId('exercice_id')->constrained();
+            $table->foreignId('programme_id')->constrained();
             $table->unique(["exercice_id", "programme_id"]);
-        });
-
-
-        // -------------------------- AJOUT DES LIAISONS --------------------------
-        Schema::table('performances', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('exercice_id')->references('id')->on('exercices');
-        });
-        Schema::table('muscles_travailles', function (Blueprint $table) {
-            $table->foreign('exercice_id')->references('id')->on('exercices');
-            $table->foreign('muscle_id')->references('id')->on('muscles');
-        });
-        Schema::table('exercices', function (Blueprint $table) {
-            $table->foreign('createur_id')->references('id')->on('users');
-        });
-        Schema::table('programmes', function (Blueprint $table) {
-            $table->foreign('createur_id')->references('id')->on('users');
-        });
-        Schema::table('exercices_programmes', function (Blueprint $table) {
-            $table->foreign('exercice_id')->references('id')->on('exercices');
-            $table->foreign('programme_id')->references('id')->on('programmes');
         });
     }
 
@@ -85,6 +70,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::disableforeignIdKeyConstraints();
         $tables = [
             'users',
             'performances',

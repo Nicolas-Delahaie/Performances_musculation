@@ -9,7 +9,11 @@ class Programme extends Model
 {
     use HasFactory;
 
-    function exercices()
+    public function createur()
+    {
+        return $this->belongsTo(User::class, 'createur_id');
+    }
+    public function exercices()
     {
         return $this->belongsToMany(Exercice::class, ExerciceProgramme::class, 'programme_id', 'exercice_id');
     }

@@ -51,4 +51,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Exercice::class, 'createur_id');
     }
+    function performances()
+    {
+        return $this->hasMany(Performance::class, 'user_id');
+    }
 }
