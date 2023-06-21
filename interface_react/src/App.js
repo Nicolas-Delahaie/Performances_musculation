@@ -22,6 +22,7 @@ function App() {
     url,
     method = "get",
     body = undefined,
+    params = undefined,
     // needAuth = true
   }) => {
     // -- CONSTANTES --
@@ -50,6 +51,9 @@ function App() {
     //   };
     // }
 
+    // -- CONSTRUCTION DE L URL --
+    if (params) url += "?" + new URLSearchParams(params).toString()
+
     // -- TRAITEMENT --
     const res = await fetch(url, {
       method: method,
@@ -60,7 +64,8 @@ function App() {
       },
       body: body && JSON.stringify(body),
     })
-      .catch(() => {
+      .catch(err => {
+        console.log(err);
         return null
       })
 
