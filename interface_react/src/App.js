@@ -1,17 +1,20 @@
 // Librairies
 import { BrowserRouter, Routes } from "react-router-dom";
 import { Route } from "react-router";
-import { useState } from "react";
+import { useState, createContext } from "react";
 
 // Composants
 import Header from "./composants/Header";
 import Exercices from "./pages/Exercices/Exercices";
 import Login from "./pages/Login";
-import Contexte from './Contexte';
 
+// Styles
 import "./styles/composants.scss";
 import "./styles/index.scss";
 import "./styles/pages.scss";
+
+// Contexte
+export const ContexteGlobal = createContext();
 
 function App() {
 
@@ -97,7 +100,7 @@ function App() {
 
   return (
     <div className="App">
-      <Contexte.Provider value={{ apiAccess }}>
+      <ContexteGlobal.Provider value={{ apiAccess }}>
         <BrowserRouter>
           <Header />
           <Routes>
@@ -105,7 +108,7 @@ function App() {
             <Route path="/login" element={<Login />} />
           </Routes>
         </BrowserRouter>
-      </Contexte.Provider>
+      </ContexteGlobal.Provider>
     </div>
   );
 }

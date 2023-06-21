@@ -10,7 +10,7 @@ import defaut from '../../img/assets/logo.jpg';
 
 // Librairies
 import { useState, useEffect, useContext, createContext } from 'react';
-import Contexte from '../../Contexte';
+import { ContexteGlobal } from '../../App';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Composants
@@ -18,13 +18,14 @@ import CarteExercice from './CarteExercice';
 import PopupExercice from './PopupExercice';
 import ToucheEchap from './../../outils/ToucheEchap';
 
-export const ExerciceContexte = createContext();
+export const ContexteExercice = createContext();
 
 function Exercices() {
-    const { apiAccess } = useContext(Contexte);
+    const { apiAccess } = useContext(ContexteGlobal);
     // Donnees
     const [programmes, setProgrammes] = useState(null);
     const [exercices, setExercices] = useState(null);
+    const [exercicesRecherches, setExercicesRecherches] = useState(null);
     const [indexExerciceAffiche, setIndexExerciceAffiche] = useState(null);     // Id de l'exerice DANS exerices
 
     // Loaders

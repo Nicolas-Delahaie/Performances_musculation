@@ -1,10 +1,10 @@
-import { ExerciceContexte } from './Exercices';
-import Contexte from '../../Contexte';
+import { ContexteExercice } from './Exercices';
+import { ContexteGlobal } from '../../App';
 import { useContext } from 'react';
 
 function CarteExercice({ exercice, indexExo, isSearched = false }) {
-    const { apiAccess } = useContext(Contexte);
-    const { setIndexExerciceAffiche, imagesExercices, performanceTexte, progSelectionne, programmes } = useContext(ExerciceContexte);
+    const { apiAccess } = useContext(ContexteGlobal);
+    const { setIndexExerciceAffiche, imagesExercices, performanceTexte, progSelectionne, programmes } = useContext(ContexteExercice);
     const image = imagesExercices[exercice.id] || imagesExercices.default;
 
     const nbPerfs = exercice.performances ? exercice.performances.length : null;

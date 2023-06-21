@@ -4,22 +4,22 @@
 // Libairies
 import { useState } from 'react';
 import { useContext } from 'react';
-import Contexte from '../../Contexte';
-import { ExerciceContexte } from './Exercices';
+import { ContexteGlobal } from '../../App';
+import { ContexteExercice } from './Exercices';
 import toast, { Toaster } from 'react-hot-toast';
 
 // Images
 import croix from './../../img/assets/croix_quitter.png';
 
 function PopupExercice({ exercice }) {
-    const { apiAccess } = useContext(Contexte);
+    const { apiAccess } = useContext(ContexteGlobal);
     const { indexExerciceAffiche,
         setIndexExerciceAffiche,
         imagesExercices,
         exercices,
         setExercices,
         performanceTexte
-    } = useContext(ExerciceContexte);
+    } = useContext(ContexteExercice);
 
     const [isPickingNewPerf, setIsPickingNewPerf] = useState();
     const [isSavingPerf, setIsSavingPerf] = useState(false);
