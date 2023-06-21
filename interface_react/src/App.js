@@ -32,7 +32,7 @@ function App() {
       401: "Authentification necessaire",
       403: "Vous ne pouvez pas accéder à ces données",
       404: "La ressource n'existe pas",
-      422: "Mauvais format de reponse",
+      422: "Erreur de validation des données côté serveur",
       503: "Service indisponible (surcharge ou maintenance)",
       default: "Erreur de serveur"
     }
