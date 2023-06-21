@@ -35,7 +35,7 @@ class ExerciceProgrammeController extends Controller
             ->where('programme_id', $programme_id)
             ->exists();
         if ($existeDeja) {
-            return response(['message' => 'Liaison deja existante'], 409);
+            return response(['message' => 'Liaison deja existante'], 422);
         }
 
 
@@ -47,5 +47,30 @@ class ExerciceProgrammeController extends Controller
         $nouvelleLiaison->save();
 
         return $nouvelleLiaison;
+    }
+
+    public function destroy(Request $request)
+    {
+        try {
+            // Verification de la validite des cles etrangers
+            $request->validate([
+                'exercice_id' => 'required|integer|min:0',
+                'programme_id' => 'required|integer|min:0',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            //Recupère l erreur de validation des champs
+            return response(['message' => 'Mauvais parametres', 'errors' => $e->errors()], 422);
+        }
+
+        // Verification de son existence
+        $exerciceProgramme = ExerciceProgramme::where('exercice_id', $request->input('exercice_id'))
+            ->where('programme_id', $request->input('programme_id'))
+            ->first();
+
+        if ($exerciceProgramme) {
+            $exerciceProgramme->delete();
+        }
+
+        return response()->noContent();
     }
 }

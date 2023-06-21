@@ -45,3 +45,4 @@ Route::get('/exercices', [ExerciceController::class, 'index']);
 use App\HTTP\Controllers\ExerciceProgrammeController;
 
 Route::post('/exercices_programmes', [ExerciceProgrammeController::class, 'store']);
+Route::delete('/exercices_programmes', [ExerciceProgrammeController::class, 'destroy']);
