@@ -60,13 +60,18 @@ function App() {
       },
       body: body && JSON.stringify(body),
     })
-      .catch(err => {
-        return {
-          success: false,
-          statusCode: 500,
-          erreur: errorMessages.default
-        }
+      .catch(() => {
+        return null
       })
+
+    if (res === null) {
+      // Un erreur inatendue (fetch n a pas fonctionne)
+      return {
+        success: false,
+        statusCode: 500,
+        erreur: errorMessages.default
+      }
+    }
 
     // -- RETOUR --
     let retour;
