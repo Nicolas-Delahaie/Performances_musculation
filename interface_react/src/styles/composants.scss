@@ -30,7 +30,19 @@
     border-radius: 15px;
     box-sizing: border-box;
 
-    img {
+    .boutonDAffectation {
+        justify-self: end;
+        width: 35px;
+        transition: 0.3s ease;
+        margin-bottom: 10px;
+
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+    }
+
+    .imgExercice {
         height: 100%;
         width: 100%;
         overflow: hidden;
@@ -61,6 +73,8 @@
     // filter: brightness(0.7);
     background-color: #000000a3;
     overflow-y: scroll;
+
+    z-index: 2; // Pour que le popup soit au dessus des cartes
 
 
     .popupExercice {

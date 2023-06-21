@@ -6,14 +6,23 @@ import { ContexteGlobal } from '../../App';
 import { useContext } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
-function CarteExercice({ exercice, indexExo, isSearched = false }) {
+// Images
+import imgAjouter from './../../img/assets/ajouter.png';
+import imgSupprimer from './../../img/assets/poubelle_supprimer.png';
+
+function CarteExercice({ exercice, indexExo, cliquable, addOrRemove }) {
     const { apiAccess } = useContext(ContexteGlobal);
     const { setIndexExerciceAffiche, imagesExercices, performanceTexte, programmes, setExercices } = useContext(ContexteExercice);
     const image = imagesExercices[exercice.id] || imagesExercices.default;
     var dialogOpened = false;
     const peformances = exercice.performances || null;
 
-    const dialogChoixProgramme = (e) => {
+    const dialogSuppression = (e) => {
+        e.stopPropagation();
+        alert("suppression");
+    }
+
+    const dialogAjout = (e) => {
         e.stopPropagation();
 
         /**@todo Recupérer les programmes disponibles pour l exercice */
@@ -60,12 +69,13 @@ function CarteExercice({ exercice, indexExo, isSearched = false }) {
 
     return (
         <div className="carteExercice"
-            onClick={isSearched ? undefined : () => setIndexExerciceAffiche(indexExo)}    // Si on a le droit de cliquer dessus (pas sur une recherche), on affiche la popup
+            onClick={cliquable ? () => setIndexExerciceAffiche(indexExo) : undefined}    // Si on a le droit de cliquer dessus (pas sur une recherche), on affiche la popup
         >
             <Toaster />
             {/** @todo Ajouter un bouton pour supprimer l exo du programme */}
             <h2>{exercice.nom}</h2>
-            <img src={image} />
+
+            <img className="imgExercice" src={image} />
             {
                 peformances &&
                 <p className="performances">Dernière perfomance :<br />
@@ -76,7 +86,8 @@ function CarteExercice({ exercice, indexExo, isSearched = false }) {
                     }
                 </p>
             }
-            {isSearched && <button onClick={(e) => dialogChoixProgramme(e)}>Ajouter à un programme</button>}
+            {addOrRemove === "add" && <img onClick={(e) => dialogAjout(e)} src={imgAjouter} className="boutonDAffectation" value="Ajouter" />}
+            {addOrRemove === "remove" && <img onClick={(e) => dialogSuppression(e)} src={imgSupprimer} className="boutonDAffectation" value="Supprimer" />}
         </div>
     );
 }

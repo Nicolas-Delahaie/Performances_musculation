@@ -231,13 +231,13 @@ function Exercices() {
                     {
                         exercicesRecherches ?   // Si on a fait une recherche
                             exercicesRecherches.map((exerciceRecherche, index) =>
-                                <CarteExercice exercice={exerciceRecherche} indexExo={index} isSearched={true} key={exerciceRecherche.id} />
+                                <CarteExercice exercice={exerciceRecherche} indexExo={index} addOrRemove={"add"} cliquable={false} key={exerciceRecherche.id} />
                             )
                             :
                             <>
                                 {!progSelectionne && < p > Aucun programme séléctionné</p>}
                                 {exercices && exercices.map((exercice, index) =>
-                                    <CarteExercice exercice={exercice} indexExo={index} isSearched={false} key={exercice.id} />
+                                    <CarteExercice exercice={exercice} indexExo={index} addOrRemove={"remove"} cliquable={true} key={exercice.id} />
                                 )}
                             </>
                     }
