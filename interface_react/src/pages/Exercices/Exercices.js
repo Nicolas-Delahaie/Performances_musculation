@@ -128,10 +128,9 @@ function Exercices() {
         setProgSelectionne(newProgId);
     }
 
-    const enregistrerNouveauProgramme = async (e, t) => {
+    const enregistrerNouveauProgramme = async (e) => {
         e.preventDefault();
 
-        toast.dismiss(t.id);
         toast.loading("Enregistrement...");
         const res = await apiAccess({
             url: 'http://localhost:8000/api/programmes',
@@ -159,7 +158,7 @@ function Exercices() {
         creatingProgram = true;
         toast((t) => (
             <div>
-                <form onSubmit={(e) => enregistrerNouveauProgramme(e, t)}>
+                <form onSubmit={(e) => { enregistrerNouveauProgramme(e); toast.dismiss(t.id) }}>
                     <label htmlFor="nomProgramme">Nom du programme : </label>
                     <input type="text" id="nomProgramme" name="nomProgramme" />
                     <div className="zoneBoutons">
@@ -235,13 +234,16 @@ function Exercices() {
                                 <CarteExercice exercice={exerciceRecherche} indexExo={index} isSearched={true} key={exerciceRecherche.id} />
                             )
                             :
-                            exercices && exercices.map((exercice, index) =>
-                                <CarteExercice exercice={exercice} indexExo={index} isSearched={false} key={exercice.id} />
-                            )
+                            <>
+                                {!progSelectionne && < p > Aucun programme séléctionné</p>}
+                                {exercices && exercices.map((exercice, index) =>
+                                    <CarteExercice exercice={exercice} indexExo={index} isSearched={false} key={exercice.id} />
+                                )}
+                            </>
                     }
                 </div>
-            </ContexteExercice.Provider>
-        </div>
+            </ContexteExercice.Provider >
+        </div >
     );
 }
 export default Exercices;

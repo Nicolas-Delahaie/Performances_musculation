@@ -1,34 +1,60 @@
+// Contextes
 import { ContexteExercice } from './Exercices';
 import { ContexteGlobal } from '../../App';
+
+// Librairies
 import { useContext } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 function CarteExercice({ exercice, indexExo, isSearched = false }) {
     const { apiAccess } = useContext(ContexteGlobal);
-    const { setIndexExerciceAffiche, imagesExercices, performanceTexte, progSelectionne, programmes } = useContext(ContexteExercice);
+    const { setIndexExerciceAffiche, imagesExercices, performanceTexte, programmes, setExercices } = useContext(ContexteExercice);
     const image = imagesExercices[exercice.id] || imagesExercices.default;
-
+    var dialogOpened = false;
     const peformances = exercice.performances || null;
 
-    const liaisonExo_Programme = async (e) => {
+    const dialogChoixProgramme = (e) => {
         e.stopPropagation();
 
+        /**@todo Recupérer les programmes disponibles pour l exercice */
+
+        dialogOpened = true;
+        toast((t) => (
+            <div>
+                <form onSubmit={(e) => { ajoutAuProgramme(e); toast.dismiss(t.id) }}>
+                    <label htmlFor="nomProgramme">Ajouter à quel programme ?</label>
+                    <select name="programmeSelectionne">
+                        {programmes.map((programme) =>
+                            <option value={programme.id}>{programme.nom}</option>
+                        )}
+                    </select>
+                    <button type="submit">Ajouter</button>
+                </form>
+            </div>
+        ))
+    }
+
+    const ajoutAuProgramme = async (e) => {
+        e.preventDefault();
+        const idProgramme = parseInt(e.target.programmeSelectionne.value);
+
+        toast.loading("Ajout en cours...");
         const res = await apiAccess({
             url: `http://localhost:8000/api/exercices_programmes`,
             method: "post",
             body: {
                 'exercice_id': exercice.id,
-                'programme_id': progSelectionne,
+                'programme_id': idProgramme,
             },
         })
-        if (res.success) {
-            //Enregistrement en front
-            // const newPerformances = [...exercice.performances, res.datas];
-            // setExercices(newExercices);
+        toast.dismiss();
+        dialogOpened = false;
 
-            alert("OK");
+        if (res.success) {
+            toast.success("Ajouté au programme !")
         }
         else {
-            alert(res.erreur)
+            toast.error("Impossible d'ajouter au programme : " + res.erreur);
         }
     }
 
@@ -36,6 +62,8 @@ function CarteExercice({ exercice, indexExo, isSearched = false }) {
         <div className="carteExercice"
             onClick={isSearched ? undefined : () => setIndexExerciceAffiche(indexExo)}    // Si on a le droit de cliquer dessus (pas sur une recherche), on affiche la popup
         >
+            <Toaster />
+            {/** @todo Ajouter un bouton pour supprimer l exo du programme */}
             <h2>{exercice.nom}</h2>
             <img src={image} />
             {
@@ -48,7 +76,7 @@ function CarteExercice({ exercice, indexExo, isSearched = false }) {
                     }
                 </p>
             }
-            {/* {isSearched && <button onClick={(e) => liaisonExo_Programme(e)}>Ajouter au programme {programmes.filter((prog) => prog.id == progSelectionne)[0].nom}</button>} */}
+            {isSearched && <button onClick={(e) => dialogChoixProgramme(e)}>Ajouter à un programme</button>}
         </div>
     );
 }
