@@ -1,3 +1,23 @@
+#header {
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 100px;
+        border-radius: 50%;
+    }
+
+    h1 {
+        text-align: center;
+        flex: 1;
+    }
+
+    .zoneDroite>a {
+        display: flex;
+    }
+
+}
+
 .carteExercice {
     display: grid;
     grid-template-rows: min-content 1fr min-content;
@@ -6,8 +26,8 @@
     padding: 0px 20px;
     margin: 10px;
 
-    border-radius: 15px;
     border: 2px solid black;
+    border-radius: 15px;
     box-sizing: border-box;
 
     img {
@@ -15,5 +35,96 @@
         width: 100%;
         overflow: hidden;
         object-fit: contain;
+    }
+
+    h2 {
+        text-align: center;
+    }
+}
+
+.carteExerciceDeveloppee {
+    @extend .carteExercice;
+    display: grid;
+    grid-template-rows: min-content 300px min-content;
+    width: 50vw;
+    padding: 0px 20px;
+    margin: 10px;
+}
+
+.popupExerciceContainer {
+    position: fixed;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    // filter: brightness(0.7);
+    background-color: #000000a3;
+    overflow-y: scroll;
+
+
+    .popupExercice {
+
+        position: relative;
+        background-color: white;
+        margin: 100px 0px;
+        border: 5px solid black;
+        width: 70%;
+        height: min-content;
+
+        &>div {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .croixQuitter {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            height: 50px;
+            width: 50px;
+            padding: 10px;
+            font-size: 2em;
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            &:hover {
+                background-color: #00000013;
+            }
+        }
+
+        .performances {
+            margin: 0px 30px 30px 30px;
+
+            .boutonNouvellePerf {
+                height: 40px;
+                width: 50%;
+            }
+
+            form {
+                border: 1px solid black;
+
+                #repetitions {
+                    width: 5ch;
+                }
+
+                #charge {
+                    width: 5ch;
+
+                }
+            }
+        }
+
+        form {}
     }
 }

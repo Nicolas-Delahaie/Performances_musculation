@@ -22,7 +22,7 @@ return new class extends Migration {
         });
         Schema::create('performances', function (Blueprint $table) {
             $table->id();
-            $table->date("date_perf")->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime("date_perf");
             $table->unsignedSmallInteger("repetitions");
             $table->unsignedSmallInteger("charge")->nullable();
             $table->unsignedBigInteger("user_id");

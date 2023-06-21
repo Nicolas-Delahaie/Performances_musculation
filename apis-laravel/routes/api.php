@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/test', function () {
-    return App\Models\User::find(1)->exercices;
+    return App\Models\Performance::find(1);
 });
 Route::get('/test2', function () {
     return App\Models\Programme::find(1)->exercices;
@@ -32,3 +32,15 @@ use App\HTTP\Controllers\ProgrammeController;
 
 Route::get('/programmes', [ProgrammeController::class, 'index']);
 Route::get('/programmes/{id}/exercices/performances', [ProgrammeController::class, 'showExercicesPerformances']);
+Route::post('/programmes', [ProgrammeController::class, 'store']);
+
+// Performances
+use App\HTTP\Controllers\PerformanceController;
+
+Route::post('/performance', [PerformanceController::class, 'store']);
+
+
+// Exercices
+use App\HTTP\Controllers\ExerciceController;
+
+Route::get('/exercices', [ExerciceController::class, 'index']);

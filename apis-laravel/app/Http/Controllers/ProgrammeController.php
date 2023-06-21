@@ -34,4 +34,21 @@ class ProgrammeController extends Controller
             ->get();
     }
 
+    function store(Request $req)
+    {
+        $programme = new Programme();
+        try {
+            $req->validate([
+                'nom' => 'required',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            //Recupère l erreur de validation des champs
+            return response(['errors' => $e->errors()], 422);
+        }
+
+        $programme->nom = $req->input('nom');
+        $programme->createur_id = 1; /**@todo rendre dynamique ça */
+        $programme->save();
+        return $programme;
+    }
 }
