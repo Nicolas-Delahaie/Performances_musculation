@@ -11,17 +11,16 @@ import defaut from '../../img/assets/logo.jpg';
 // Librairies
 import { useState, useEffect, useContext, createContext } from 'react';
 import { ContexteGlobal } from '../../App';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 // Composants
 import CarteExercice from './CarteExercice';
 import PopupExercice from './PopupExercice';
-import ToucheEchap from './../../outils/ToucheEchap';
 
 export const ContexteExercice = createContext();
 
 function Exercices() {
-    const { apiAccess } = useContext(ContexteGlobal);
+    const { apiAccess, showToasterValidation } = useContext(ContexteGlobal);
     // Donnees
     const [programmes, setProgrammes] = useState(null);
     const [exercices, setExercices] = useState(null);
@@ -155,19 +154,13 @@ function Exercices() {
 
         if (creatingProgram) return; // Si on est deja en train de creer un programme, on ne peut pas en creer un autre
 
-        creatingProgram = true;
-        toast((t) => (
-            <div>
-                <form onSubmit={(e) => { enregistrerNouveauProgramme(e); toast.dismiss(t.id) }}>
-                    <label htmlFor="nomProgramme">Nom du programme : </label>
-                    <input type="text" id="nomProgramme" name="nomProgramme" />
-                    <div className="zoneBoutons">
-                        <button type="button" onClick={() => { toast.dismiss(t.id); creatingProgram = false; }}>Annuler</button>
-                        <input type="submit" value="Fabriquer" />
-                    </div>
-                </form>
-            </div>
-        ))
+        // creatingProgram = true;
+        showToasterValidation(
+            "Nom du programme : ",
+            "Fabriquer",
+            enregistrerNouveauProgramme,
+            <input type="text" id="nomProgramme" name="nomProgramme" autoFocus />
+        );
     }
 
 
@@ -206,7 +199,6 @@ function Exercices() {
     // Render
     return (
         <div id="home">
-            <Toaster />
             <ContexteExercice.Provider value={{ exercices, setExercices, imagesExercices, indexExerciceAffiche, setIndexExerciceAffiche, performanceTexte, progSelectionne, programmes }}>
                 {indexExerciceAffiche !== null && <PopupExercice exercice={exercices[indexExerciceAffiche]} />}
                 <div className="filtres">

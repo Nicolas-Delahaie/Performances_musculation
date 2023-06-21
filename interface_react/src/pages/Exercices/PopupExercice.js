@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { ContexteGlobal } from '../../App';
 import { ContexteExercice } from './Exercices';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 // Images
 import croix from './../../img/assets/croix_quitter.png';
@@ -134,7 +134,6 @@ function PopupExercice({ exercice }) {
 
     return exercice && (
         <div className="popupExerciceContainer" onClick={() => setIndexExerciceAffiche(null)}>
-            <Toaster />
             <div className="popupExercice" onClick={(e) => e.stopPropagation()}>
                 <img className="croixQuitter" src={croix} onClick={() => setIndexExerciceAffiche(null)} />
                 <h1>{exercice.nom}</h1>

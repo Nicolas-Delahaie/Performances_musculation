@@ -4,14 +4,14 @@ import { ContexteGlobal } from '../../App';
 
 // Librairies
 import { useContext } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 // Images
 import imgAjouter from './../../img/assets/ajouter.png';
 import imgSupprimer from './../../img/assets/poubelle_supprimer.png';
 
 function CarteExercice({ exercice, indexExo, cliquable, addOrRemove }) {
-    const { apiAccess } = useContext(ContexteGlobal);
+    const { apiAccess, showToasterValidation } = useContext(ContexteGlobal);
     const { setIndexExerciceAffiche, imagesExercices, performanceTexte, programmes, setExercices } = useContext(ContexteExercice);
     const image = imagesExercices[exercice.id] || imagesExercices.default;
     var dialogOpened = false;
@@ -19,6 +19,14 @@ function CarteExercice({ exercice, indexExo, cliquable, addOrRemove }) {
 
     const dialogSuppression = (e) => {
         e.stopPropagation();
+        showToasterValidation(
+            "Voulez-vous vraiment supprimer cet exercice du programme ?",
+            "Supprimer",
+            () => suppressionExercice()
+        );
+    }
+
+    const suppressionExercice = async () => {
         alert("suppression");
     }
 
@@ -27,20 +35,18 @@ function CarteExercice({ exercice, indexExo, cliquable, addOrRemove }) {
 
         /**@todo Recupérer les programmes disponibles pour l exercice */
 
-        dialogOpened = true;
-        toast((t) => (
-            <div>
-                <form onSubmit={(e) => { ajoutAuProgramme(e); toast.dismiss(t.id) }}>
-                    <label htmlFor="nomProgramme">Ajouter à quel programme ?</label>
-                    <select name="programmeSelectionne">
-                        {programmes.map((programme) =>
-                            <option value={programme.id}>{programme.nom}</option>
-                        )}
-                    </select>
-                    <button type="submit">Ajouter</button>
-                </form>
-            </div>
-        ))
+        // dialogOpened = true;
+
+        showToasterValidation(
+            "Ajouter à quel programme ?",
+            "Valider",
+            ajoutAuProgramme,
+            <select name="programmeSelectionne" autoFocus>
+                {programmes.map((programme) =>
+                    <option value={programme.id}>{programme.nom}</option>
+                )}
+            </select>
+        );
     }
 
     const ajoutAuProgramme = async (e) => {
@@ -71,7 +77,6 @@ function CarteExercice({ exercice, indexExo, cliquable, addOrRemove }) {
         <div className="carteExercice"
             onClick={cliquable ? () => setIndexExerciceAffiche(indexExo) : undefined}    // Si on a le droit de cliquer dessus (pas sur une recherche), on affiche la popup
         >
-            <Toaster />
             {/** @todo Ajouter un bouton pour supprimer l exo du programme */}
             <h2>{exercice.nom}</h2>
 

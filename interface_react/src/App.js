@@ -7,6 +7,7 @@ import { useState, createContext } from "react";
 import Header from "./composants/Header";
 import Exercices from "./pages/Exercices/Exercices";
 import Login from "./pages/Login";
+import toast, { Toaster } from "react-hot-toast";
 
 // Styles
 import "./styles/composants.scss";
@@ -108,10 +109,51 @@ function App() {
     return retour;
   }
 
+  //Fonctions de rendu
+  const showToasterValidation = (texteParagraphe, texteBouton, callback, zoneDeSaisie = null) => {
+    var idToaster = null;
+
+    // Ecoute de la touche Echap
+    const handleEscape = (e) => {
+      e.stopPropagation();    /**@todo verifier que ca fonctionne bien (pas sur) */
+      if (e.key === 'Escape') {
+        toast.dismiss(idToaster);
+      }
+    }
+    document.addEventListener('keydown', handleEscape);
+
+    // Validation du formulaire
+    const validation = (e) => {
+      toast.dismiss(idToaster);
+      document.removeEventListener('keydown', handleEscape);
+      callback(e);
+    }
+
+    idToaster = toast((
+      <div className="ToasterValidation">
+        <form onSubmit={e => validation(e)}>
+          <h3>{texteParagraphe}</h3>
+          <div className="zoneDeSaisie">
+            {zoneDeSaisie}
+          </div>
+          <div className="zoneBoutons">
+            <input type="button" onClick={() => toast.dismiss()} value="Annuler" />
+            <input type="submit" value={texteBouton} autoFocus={zoneDeSaisie ? false : true} />   {/* // On met le focus sur le bouton uniquement s'il n'y a pas de zone de saisie d'info */}
+          </div>
+        </form>
+      </div>
+    ), {
+      duration: Infinity, // Empêche la fermeture automatique
+    })
+
+    return idToaster;
+  }
+
   return (
     <div className="App">
-      <ContexteGlobal.Provider value={{ apiAccess }}>
+      <ContexteGlobal.Provider value={{ apiAccess, showToasterValidation }}>
         <BrowserRouter>
+          <Toaster />
           <Header />
           <Routes>
             <Route path="/" element={<Exercices />} />
