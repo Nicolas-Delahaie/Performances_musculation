@@ -33,7 +33,7 @@ function Exercices() {
 
     // Filtres
     const [progSelectionne, setProgSelectionne] = useState(null);
-    const [filtreRecherche, setFiltreRecherche] = useState("");
+
 
     // Chargement de données
     const getProgrammes = async () => {
@@ -62,18 +62,24 @@ function Exercices() {
             console.log(rep.erreur)
         }
     }
-    // const getAllExercices = async () => {
-    //     setExercices(null);
-    //     const rep = await apiAccess({
-    //         url: `http://localhost:8000/api/exercices?user_id=1`   /**@todo rendre dynamique */
-    //     })
-    //     if (rep.success) {
-    //         setExercices(rep.datas);
-    //     }
-    //     else {
-    //         console.log(rep.erreur)
-    //     }
-    // }
+    const getExercicesRecherches = async (recherche) => {
+        setExercicesRecherches(null);
+
+        // On charge les exercices lies au nouveau programme selectionne
+        const rep = await apiAccess({
+            url: `http://localhost:8000/api/exercices`,
+            params: {
+                recherche: recherche,
+                user_id: 1
+            }
+        })
+        if (rep.success) {
+            setExercicesRecherches(rep.datas);
+        }
+        else {
+            console.log(rep.erreur);
+        }
+    }
 
     // Initialisation
     useEffect(() => {
@@ -90,46 +96,6 @@ function Exercices() {
         }
     }, [progSelectionne]);
 
-    // Fonctions de rendu
-    const renderExercicesFiltres = (exercices) => {
-        /**@todo faire en sorte qu'il aille voir dans toute la base de données */
-        const trans_table = {
-            'À': 'A', 'Â': 'A', 'Ä': 'A', 'Æ': 'AE',
-            'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E',
-            'Ë': 'E', 'Î': 'I', 'Ï': 'I', 'Ô': 'O',
-            'Œ': 'OE', 'Ù': 'U', 'Û': 'U', 'Ü': 'U',
-            'à': 'a', 'â': 'a', 'ä': 'a', 'æ': 'ae',
-            'ç': 'c', 'è': 'e', 'é': 'e', 'ê': 'e',
-            'ë': 'e', 'î': 'i', 'ï': 'i', 'ô': 'o',
-            'œ': 'oe', 'ù': 'u', 'û': 'u', 'ü': 'u',
-            'ß': 'ss'
-        };
-        if (filtreRecherche) {
-            // S'il y a une recherche d'effectuee
-            return exercices.map((exercice, index) => {
-                // Formatage des noms des exercices pour la recherche
-                // En minuscule et sans accents
-                let titre = exercice.nom.toLowerCase().replace(/[À-ÖØ-öø-ÿ]/g, function (match) {
-                    return trans_table[match];
-                });
-
-                let recherche = filtreRecherche.toLowerCase().replace(/[À-ÖØ-öø-ÿ]/g, function (match) {
-                    return trans_table[match];
-                });
-
-                if (titre.includes(recherche)) {
-                    // Le titre de l'exercice contient la recherche
-                    return <CarteExercice exercice={exercice} indexExo={index} isSearched="true" key={exercice.id} />
-                }
-            }).filter(Boolean); // Pour supprimer les null
-        }
-        else {
-            // Si aucune recherche n'a ete effectuee
-            return exercices.map((exercice, index) => {
-                return <CarteExercice exercice={exercice} indexExo={index} key={exercice.id} />
-            });
-        }
-    }
 
     // Callbacks
     /**
@@ -138,9 +104,17 @@ function Exercices() {
      */
     const rechercheValidee = (e) => {
         e.preventDefault();
-        setFiltreRecherche(e.target.recherche.value);
-        // setProgSelectionne(null);
-        // getAllExercices();
+        const saisie = e.target.recherche.value;
+
+        if (saisie === "") {
+            // Aucune recherche faite
+            setExercicesRecherches(null);
+        }
+        else {
+            // Recuperation des exercices correspondant a la recherche
+            setProgSelectionne(null);
+            getExercicesRecherches(saisie);
+        }
     }
     /**
      * Met a jour le filtre de programme en fonction du clic
@@ -150,6 +124,7 @@ function Exercices() {
         // Le filtre est remis a null si on clique sur le programme deja selectionne
         const newProgId = id === progSelectionne ? null : id;
         localStorage.setItem('progSelectionne', newProgId);
+        setExercicesRecherches(null);
         setProgSelectionne(newProgId);
     }
 
@@ -233,7 +208,7 @@ function Exercices() {
     return (
         <div id="home">
             <Toaster />
-            <ExerciceContexte.Provider value={{ exercices, setExercices, imagesExercices, indexExerciceAffiche, setIndexExerciceAffiche, performanceTexte, progSelectionne, programmes }}>
+            <ContexteExercice.Provider value={{ exercices, setExercices, imagesExercices, indexExerciceAffiche, setIndexExerciceAffiche, performanceTexte, progSelectionne, programmes }}>
                 {indexExerciceAffiche !== null && <PopupExercice exercice={exercices[indexExerciceAffiche]} />}
                 <div className="filtres">
                     <form onSubmit={rechercheValidee}>
@@ -254,9 +229,18 @@ function Exercices() {
                     }
                 </div>
                 <div className="exercices">
-                    {exercices && renderExercicesFiltres(exercices)}
+                    {
+                        exercicesRecherches ?   // Si on a fait une recherche
+                            exercicesRecherches.map((exerciceRecherche, index) =>
+                                <CarteExercice exercice={exerciceRecherche} indexExo={index} isSearched={true} key={exerciceRecherche.id} />
+                            )
+                            :
+                            exercices && exercices.map((exercice, index) =>
+                                <CarteExercice exercice={exercice} indexExo={index} isSearched={false} key={exercice.id} />
+                            )
+                    }
                 </div>
-            </ExerciceContexte.Provider>
+            </ContexteExercice.Provider>
         </div>
     );
 }

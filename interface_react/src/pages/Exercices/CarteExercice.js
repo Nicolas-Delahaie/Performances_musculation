@@ -7,8 +7,7 @@ function CarteExercice({ exercice, indexExo, isSearched = false }) {
     const { setIndexExerciceAffiche, imagesExercices, performanceTexte, progSelectionne, programmes } = useContext(ContexteExercice);
     const image = imagesExercices[exercice.id] || imagesExercices.default;
 
-    const nbPerfs = exercice.performances ? exercice.performances.length : null;
-    console.log(programmes, progSelectionne)
+    const peformances = exercice.performances || null;
 
     const liaisonExo_Programme = async (e) => {
         e.stopPropagation();
@@ -35,14 +34,14 @@ function CarteExercice({ exercice, indexExo, isSearched = false }) {
 
     return (
         <div className="carteExercice"
-            onClick={() => setIndexExerciceAffiche(indexExo)}
+            onClick={isSearched ? undefined : () => setIndexExerciceAffiche(indexExo)}    // Si on a le droit de cliquer dessus (pas sur une recherche), on affiche la popup
         >
             <h2>{exercice.nom}</h2>
             <img src={image} />
             {
-                nbPerfs !== null &&
+                peformances &&
                 <p className="performances">Dernière perfomance :<br />
-                    {nbPerfs === 0 ?
+                    {peformances.length === 0 ?
                         "Aucune performance enregistrée"
                         :
                         performanceTexte(exercice.performances[0], exercice.poidsDeCorps)
