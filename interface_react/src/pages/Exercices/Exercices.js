@@ -130,6 +130,12 @@ function Exercices() {
     const enregistrerNouveauProgramme = async (e) => {
         e.preventDefault();
 
+        // Verification que le nom du programme n'est pas vide
+        if (e.target.nomProgramme.value === "") {
+            toast.error("Le nom du programme ne peut pas être vide !");
+            return;
+        }
+
         toast.loading("Enregistrement...");
         const res = await apiAccess({
             url: 'http://localhost:8000/api/programmes',
@@ -156,10 +162,10 @@ function Exercices() {
 
         // creatingProgram = true;
         showToasterValidation(
-            "Nom du programme : ",
+            "Nom du programme",
             "Fabriquer",
             enregistrerNouveauProgramme,
-            <input type="text" id="nomProgramme" name="nomProgramme" autoFocus />
+            <input type="text" className="inputNomNouveauProgramme" name="nomProgramme" autoFocus autocomplete="off" />
         );
     }
 
