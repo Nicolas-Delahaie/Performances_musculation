@@ -142,3 +142,33 @@
         form {}
     }
 }
+
+
+.ToasterValidation {
+    h3 {
+        margin: 0;
+    }
+
+    .zoneDeSaisie {
+        margin: 5px 0px;
+
+        // Elements personnalisés
+        .inputNomNouveauProgramme {
+            padding: 2px;
+        }
+
+        .inputProgrammeSelectionne {
+            width: 100%;
+        }
+    }
+
+    .zoneBoutons {
+        display: flex;
+        justify-content: space-around;
+
+        input {
+            padding: 5px;
+            margin: 5px;
+        }
+    }
+}

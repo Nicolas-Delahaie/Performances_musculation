@@ -41,7 +41,7 @@ function CarteExercice({ exercice, indexExo, cliquable, addOrRemove }) {
             "Ajouter à quel programme ?",
             "Valider",
             ajoutAuProgramme,
-            <select name="programmeSelectionne" autoFocus>
+            <select name="programmeSelectionne" className="inputProgrammeSelectionne" autoFocus>
                 {programmes.map((programme) =>
                     <option value={programme.id}>{programme.nom}</option>
                 )}
