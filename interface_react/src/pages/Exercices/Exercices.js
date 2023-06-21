@@ -157,10 +157,6 @@ function Exercices() {
         }
     }
     const fabricationProgramme = () => {
-
-        if (creatingProgram) return; // Si on est deja en train de creer un programme, on ne peut pas en creer un autre
-
-        // creatingProgram = true;
         showToasterValidation(
             "Nom du programme",
             "Fabriquer",
@@ -216,7 +212,7 @@ function Exercices() {
                             {
                                 programmes && programmes.map((programme) =>
                                     <button onClick={() => clicFiltreProgramme(programme.id)}
-                                        className={programme.id === progSelectionne ? "selectionne" : ""}
+                                        className={programme.id === progSelectionne ? "selectionne" : undefined}
                                         key={programme.id}
                                     >{programme.nom}</button>
                                 )
@@ -228,12 +224,16 @@ function Exercices() {
                 <div className="exercices">
                     {
                         exercicesRecherches ?   // Si on a fait une recherche
-                            exercicesRecherches.map((exerciceRecherche, index) =>
-                                <CarteExercice exercice={exerciceRecherche} indexExo={index} addOrRemove={"add"} cliquable={false} key={exerciceRecherche.id} />
-                            )
+                            <>
+                                {exercicesRecherches.length === 0 && <p>Aucun exercice correspond à cette recherche</p>}
+                                {exercicesRecherches.map((exerciceRecherche, index) =>
+                                    <CarteExercice exercice={exerciceRecherche} indexExo={index} addOrRemove={"add"} cliquable={false} key={exerciceRecherche.id} />
+                                )}
+                            </>
                             :
                             <>
                                 {!progSelectionne && < p > Aucun programme séléctionné</p>}
+                                {exercices && exercices.length === 0 && <p>Aucun exercice dans ce programme</p>}
                                 {exercices && exercices.map((exercice, index) =>
                                     <CarteExercice exercice={exercice} indexExo={index} addOrRemove={"remove"} cliquable={true} key={exercice.id} />
                                 )}
