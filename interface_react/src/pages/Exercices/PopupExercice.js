@@ -2,8 +2,7 @@
  * @todo Gerer l ordre de deux performances fabriquees dans la meme minute
  */
 // Libairies
-import { useState } from 'react';
-import { useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { ContexteGlobal } from '../../App';
 import { ContexteExercice } from './Exercices';
 import toast from 'react-hot-toast';
@@ -13,7 +12,8 @@ import croix from './../../img/assets/croix_quitter.png';
 
 function PopupExercice({ exercice }) {
     const { apiAccess } = useContext(ContexteGlobal);
-    const { indexExerciceAffiche,
+    const {
+        indexExerciceAffiche,
         setIndexExerciceAffiche,
         imagesExercices,
         exercices,
@@ -21,7 +21,7 @@ function PopupExercice({ exercice }) {
         performanceTexte
     } = useContext(ContexteExercice);
 
-    const [isPickingNewPerf, setIsPickingNewPerf] = useState();
+    const [isPickingNewPerf, setIsPickingNewPerf] = useState(false);
     const [isSavingPerf, setIsSavingPerf] = useState(false);
 
     const image = imagesExercices[exercice.id] || imagesExercices.default;
@@ -132,8 +132,38 @@ function PopupExercice({ exercice }) {
     }
 
 
+    // useEffect(() => {
+    //     console.log("isPickingNewPerf a changé : ", isPickingNewPerf);
+    // }, [isPickingNewPerf])
+
+
+    // Ecoute de la touche Echap
+    const handleEscape = (e) => {
+        e.stopPropagation();    /**@todo verifier que ca fonctionne bien (pas sur) */
+        if (e.key === 'Escape') {
+            if (isPickingNewPerf === true) {
+                // On fait echap durant la creation d une nouvelle perf
+                setIsPickingNewPerf(false);
+            }
+            else {
+                // On fait echap depuis la popup
+                setIndexExerciceAffiche(null);
+            }
+        }
+    }
+
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+        }
+    }, [])
+
+
     return exercice && (
-        <div className="popupExerciceContainer" onClick={() => setIndexExerciceAffiche(null)}>
+        <div id="popupExerciceContainer" onClick={() => setIndexExerciceAffiche(null)}>
             <div className="popupExercice" onClick={(e) => e.stopPropagation()}>
                 <img className="croixQuitter" src={croix} onClick={() => setIndexExerciceAffiche(null)} />
                 <h1>{exercice.nom}</h1>
