@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/test', function () {
+    return Programme::find(1)->exercices;
+});
 
 
 
@@ -25,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 use App\HTTP\Controllers\ProgrammeController;
 
 Route::get('/programmes', [ProgrammeController::class, 'index']);
+Route::get('/programmes/disponibles', [ProgrammeController::class, 'getProgrammesDisponibles']);
 Route::get('/programmes/{id}/exercices/performances', [ProgrammeController::class, 'showExercicesPerformances']);
 Route::post('/programmes', [ProgrammeController::class, 'store']);
 
