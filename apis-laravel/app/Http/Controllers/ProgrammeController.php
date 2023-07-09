@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Programme;
+use App\Models\ExerciceProgramme;
 
 
 class ProgrammeController extends Controller
@@ -75,5 +76,11 @@ class ProgrammeController extends Controller
         $programme->createur_id = 1; /**@todo rendre dynamique ça */
         $programme->save();
         return $programme;
+    }
+
+    public function destroy($id)
+    {
+        ExerciceProgramme::destroy($id);
+        return response()->noContent();
     }
 }

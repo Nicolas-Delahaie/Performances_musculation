@@ -83,7 +83,10 @@ function Exercices() {
     // Initialisation
     useEffect(() => {
         getProgrammes();
-        setProgSelectionne(Number(localStorage.getItem('progSelectionne')));
+
+        // Recuperation du programmation selectionne en memoire
+        const progStocke = localStorage.getItem('progSelectionne');
+        setProgSelectionne(progStocke !== "null" ? Number(progStocke) : null);
     }, []);
     // Mises a jour
     useEffect(() => {
@@ -127,12 +130,57 @@ function Exercices() {
         setProgSelectionne(newProgId);
     }
 
-    const enregistrerNouveauProgramme = async (e) => {
+    const suppressionProgramme = async (e) => {
+        alert("Suppression programme");
+        e.preventDefault();
+
+        // // Suppression front
+
+
+        // // Suppression back
+        // const res = await apiAccess({
+        //     url: `http://localhost:8000/api/programmes/${progSelectionne}`,
+        //     method: 'delete',
+        // })
+
+        // if (res.success) {
+        //     toast.success("Programme supprimé !");
+        // }
+        // else {
+        //     toast.error("Erreur de suppression");
+        // }
+    }
+    const clicSuppressionProgramme = () => {
+        if (!exercices) {
+            toast.error("Veuillez attendre le chargement des exercices liés");
+            return;
+        }
+
+        if (exercices.length === 0) {
+            // Aucun exercice lie
+            suppressionProgramme();
+        }
+        else {
+            // Demande validation
+            showToasterValidation(
+                "Ce programme contient des exercices, supprimer quand même ?",
+                "Supprimer",
+                suppressionProgramme,
+            );
+        }
+    }
+
+    const fabricationProgramme = async (e) => {
         e.preventDefault();
 
         // Verification que le nom du programme n'est pas vide
         if (e.target.nomProgramme.value === "") {
             toast.error("Le nom du programme ne peut pas être vide !");
+            return;
+        }
+        // Verification que le nom du programme n est pas trop long
+        if (e.target.nomProgramme.value.length > 15) {
+            toast.error("Le nom du programme doit avoir moins de 15 caractères");
             return;
         }
 
@@ -150,17 +198,18 @@ function Exercices() {
 
         if (res.success) {
             setProgrammes([...programmes, res.datas]);
-            toast.success("Programme fabriqué !")
+            setProgSelectionne(res.datas.id);
+            toast.success("Programme fabriqué !");
         }
         else {
             toast.error("Impossible de fabriquer le programme !")
         }
     }
-    const fabricationProgramme = () => {
+    const clicFabricationProgramme = () => {
         showToasterValidation(
             "Nom du programme",
             "Fabriquer",
-            enregistrerNouveauProgramme,
+            fabricationProgramme,
             <input type="text" className="inputNomNouveauProgramme" name="nomProgramme" autoFocus autocomplete="off" />
         );
     }
@@ -207,19 +256,18 @@ function Exercices() {
                     <form onSubmit={rechercheValidee}>
                         <input name="recherche" type="text" placeholder="Rechercher un exercice" autoComplete="off" />
                     </form>
-                    {programmes &&
-                        <div className="programmes">
-                            {
-                                programmes && programmes.map((programme) =>
-                                    <button onClick={() => clicFiltreProgramme(programme.id)}
-                                        className={programme.id === progSelectionne ? "selectionne" : undefined}
-                                        key={programme.id}
-                                    >{programme.nom}</button>
-                                )
-                            }
-                            <button onClick={() => fabricationProgramme()} className="nouveauProgramme">+</button>
-                        </div>
-                    }
+                    <div className="programmes">
+                        {
+                            programmes && programmes.map((programme) =>
+                                <button onClick={() => clicFiltreProgramme(programme.id)}
+                                    className={programme.id === progSelectionne ? "selectionne" : undefined}
+                                    key={programme.id}
+                                >{programme.nom}</button>
+                            )
+                        }
+                        {progSelectionne && <button onClick={() => clicSuppressionProgramme()} className="suppressionProgramme">-</button>}
+                        <button onClick={() => clicFabricationProgramme()} className="nouveauProgramme">+</button>
+                    </div>
                 </div>
                 <div className="exercices">
                     {

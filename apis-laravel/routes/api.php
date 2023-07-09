@@ -31,6 +31,7 @@ Route::get('/programmes', [ProgrammeController::class, 'index']);
 Route::get('/programmes/disponibles', [ProgrammeController::class, 'getProgrammesDisponibles']);
 Route::get('/programmes/{id}/exercices/performances', [ProgrammeController::class, 'showExercicesPerformances']);
 Route::post('/programmes', [ProgrammeController::class, 'store']);
+Route::delete('/programmes/{id}', [ProgrammeController::class, 'destroy']);
 
 
 // Performances

@@ -22,9 +22,16 @@
                 background-color: #e0e0e0;
             }
 
-            .nouveauProgramme {
-                margin-left: 30px;
+            .suppressionProgramme {
                 width: 30px;
+                margin-left: 30px;
+                background-color: red;
+            }
+
+            .nouveauProgramme {
+                width: 30px;
+                margin-left: 5px;
+                background-color: green;
             }
         }
     }
