@@ -1,0 +1,24 @@
+Modifications bdd :
+- programme n'a pas de createur. Chaque personne spawn avvec les 3 programmes mais il est libre d'en faire ce qu'il veut ensuite
+- table programmes_par_defaut des exercices
+
+
+BUG echap : corriger la fermeture du formulaire de creation de nouvelle perf
+
+
+
+permettre de supprimer ses performances
+
+fabriquer diagramme des performances
+
+contraindre le noms des programmes et le nombre de programmes
+
+ajouter la gestion des utilisateurs
+
+afficher les groupes musculaires en bas des exercices
+
+BDD : ajouter une table synonymes de chaque exercice
+
+Ajout d'un exercice à un programme : remplacer la liste déroulante par un simple liste
+
+peupler les exercices avec des apis de vrais exercices existants
