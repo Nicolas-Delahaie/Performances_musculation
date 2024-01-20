@@ -1,0 +1,58 @@
+# LARAVEL : docker container run -d -p 8000:8000 --name stage_laravel -v ./apis_laravel:/app bitnami/laravel:latest
+# REACT : docker container run -d -p 3000:3000 --name mon_projet_react -v /chemin/vers/votre/projet:/app node:latest sh -c "cd /app && npm start"
+
+
+# docker-compose up pour lancer le projet
+version: '1'
+services:
+  # laravel:
+  #   build: 
+  #     context: ./apis-laravel
+  #     dockerfile: Dockerfile
+  #   image: laravel_app
+  #   container_name: apis-laravel
+  #   tty: true
+  #   volumes:
+  #     - ./apis-laravel:/var/www
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./public:/var/www/html
+    ports:
+      - "8000:80"
+
+  db:
+    image: mysql:8.0
+    container_name: db
+    environment:
+      MYSQL_DATABASE: stage_quebec
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    # volumes:
+    #   - ./mysql_datas:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+
+  
+  # npm:
+  #   build: 
+  #     context: ./chemin_vers_votre_projet_react
+  #     dockerfile: Dockerfile
+  #   image: react_app
+  #   container_name: appli-react
+  #   restart: unless-stopped
+  #   tty: true
+  #   environment:
+  #     SERVICE_NAME: npm
+  #     SERVICE_TAGS: dev
+  #   working_dir: /app
+  #   volumes:
+  #     - ./chemin_vers_votre_projet_react:/app
